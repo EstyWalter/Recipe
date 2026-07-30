@@ -1,0 +1,99 @@
+
+User
+    FirstName varchar(50) not null not blank 
+    LastName varchar(50) not null not blank 
+    UserName varchar(50) not null not blank unique 
+
+cuisine
+    cuisineid 
+    cuisinetype varchar(45) not null unique
+    constraint not blank
+
+ingredient 
+    ingredientid
+    IngredientName varchar (50) not null unique
+    constraint not blank
+    PictureIngredient computed coloumn using functions as concat and replace
+
+recipe 
+    RecipeId
+    userid FK not null
+    cuisineid FK not null
+    DateDrafted datetime2 not null
+    can not be in the future 
+    DatePublished datetime2 null
+    can not be in the future
+    DateArchived datetime2 null
+    can not be in the future 
+    RecipeName varchar (100) not null unique
+    Calories int not null 
+    constraint not neg
+    status as case when then 
+    constraint DateDrafted is before DateArchived and DatePublished
+    PictureRecipe computed coloumn using functions as concat and replace 
+
+RecipeIngredient
+    RecipeIngredientId 
+    RecipeId
+    Ingredientid
+    IngredientSequence int not null
+    constraint not neg 
+    measurmenttype varchar(50) not null
+    not blank 
+    amount decimal(4,2) not null
+    not neg 
+    constraint unique(IngredientSequence, RecipeId)
+ 
+directions 
+    directionsId 
+    recipeid FK
+    directionssequence int not null
+    constriant not neg 
+    steps varchar(500) not null
+    constraint unique(num, RecipeId)
+
+meal 
+    mealid
+    userid FK
+    MealName varchar (50) 
+    constraint unique
+    MealActive bit not null
+    DateCreated date default getdate()
+    PictureMeal computed coloumn using functions as concat and replace
+
+course
+    courseId
+    CourseName varchar(50) not null unique 
+    constraint not blank
+    CourseSequence int not null
+    counstraint not neg 
+
+MealCourse
+    mealcourseid
+    mealId FK
+    courseId Fk
+    constraint unique(mealid, courseId)
+
+MealCourseRecipe
+    Mealcourserecipeid 
+    mealCourseId Fk
+    recipeId FK
+    MainDish bit not null 
+
+cookbook
+    cookbookid
+    userid FK
+    bookname varchar(100) not null unique
+    constriant not blank 
+    price Decimal(5,2) not null 
+    not neg
+    BookActive bit not null
+    DateCreated date default getdate()
+    PictureCookbook computed coloumn using functions as concat and replace
+
+'CookbookRecipe
+    CookbookRecipeId 
+    Cookbookid FK
+    recipeid FK
+    RecipeSequence int not null 
+    constraint not neg '
