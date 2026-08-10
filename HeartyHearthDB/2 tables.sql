@@ -41,40 +41,7 @@ create table dbo.Ingredient(
     PictureIngredient as concat('Ingredient_', replace(ingredientname, ' ', '_' ), '.jpg')
 )
 --AS Remove all this commented out code
-/*
-go 
-create table dbo.Recipe(
-    RecipeId Int not null identity primary key,
-    CuisineId  int not null constraint F_Recipe_Cuisine foreign key references Cuisine(Cuisineid),
-    UsersId int not null constraint F_Recipe_Users foreign key references users(Usersid),
----AS Date draft must be between creation of website (date of your choice) and the current date
-    DateDrafted datetime2 not null
-    constraint Recipe_Date_Drafted_between_creation_Of_website_and_current_date check(DateDrafted between '1999-01-01' and getdate()),
-    DatePublished datetime2 null
-    constraint Recipe_Date_published_not_in_the_future check(DatePublished <= getdate()),
-    DateArchived datetime2 null
-    constraint Recipe_Date_Archived_not_in_the_future check(DateArchived <= getdate()),
-    RecipeName varchar (100) not null 
-    Constraint U_Recipe_Recipe_Name unique
-    constraint Recipe_Recipe_Name_not_blank check(RecipeName <> ''),
-    Calories int not null 
-    constraint Recipe_Calories_may_not_be_neg check(Calories > 0),
-    constraint Recipe_Date_archived_is_after_Date_drafted check(DateDrafted <= datearchived),
-    constraint Recipe_Date_Published_is_after_Date_drafted check(DateDrafted <= datepublished),
---AS You need to include multi column constraints to ensure that later statuses are not before earlier ones.
---AS Also, in the case statement begin with the later status and move to the earlier ones.
---AS Once you do these two things this case statement will be simplified a lot.
-    statuses as case 
----AS I Don't see a need for the converts, they are all varchars.
-    when datepublished is null and datearchived is null then 'Drafted'
-    when datepublished is not null and datearchived is null then 'Published'
-    when datepublished < datearchived then 'Archived'
-    when datepublished is null and datearchived is not null then 'Archived'
-    when datepublished > datearchived then 'Published'
-    end,
-    PictureRecipe as concat('Recipe_', replace(RecipeName, ' ', '_' ), '.jpg')
-)
-*/
+
 go 
 create table dbo.Recipe(
     RecipeId Int not null identity primary key,
@@ -89,27 +56,23 @@ create table dbo.Recipe(
     RecipeName varchar (100) not null 
     Constraint U_Recipe_Recipe_Name unique
     constraint Recipe_Recipe_Name_not_blank check(RecipeName <> ''),
-    Calories int not null 
-    constraint Recipe_Calories_may_not_be_neg check(Calories > 0),
---AS You need one more constraint to check that date published is before date archived
-    constraint Recipe_Date_archived_is_after_Date_drafted check(DateDrafted <= datearchived),
-    constraint Recipe_Date_Published_is_after_Date_drafted check(DateDrafted <= datepublished),
+    Calories int not null constraint Recipe_Calories_may_not_be_neg check(Calories > 0),
+    constraint Recipe_Date_archived_is_after_Date_drafted check(DateArchived is null or DateDrafted <= DateArchived),
+    constraint Recipe_Date_Published_is_after_Date_drafted check(DatePublished is null or DateDrafted <= DatePublished),
+    constraint Recipe_Date_Published_before_Date_Archived check(DateArchived is null or DatePublished is null or DatePublished <= DateArchived),
     statuses as case 
----AS There is no need for all this logic, if a later date is filled in that means it's currently in thatstatus.
-    when datepublished < datearchived or (datepublished is null and datearchived is not null) then 'Archived'
-    when datepublished > datearchived or (datepublished is not null and datearchived is null) then 'Published'
-    else 'drafted'
+        when DateArchived is not null then 'Archived'
+        when DatePublished is not null then 'Published'
+        else 'Drafted'
     end,
     PictureRecipe as concat('Recipe_', replace(RecipeName, ' ', '_' ), '.jpg')
 )
-go 
---AS Typo in the word measurement
+go
 create table dbo.Measurment(
     MeasurmentId int not null identity primary key, 
     MeasurmentType varchar(50) not null
---AS Take out ingredient from the constraint name since this is measurement table
-    constraint Ingredient_Measurment_Type_not_blank check(measurmenttype <> '')
-    constraint U_Measurment_Measurment_Type unique
+    constraint Measurment_Type_not_blank check(MeasurmentType <> ''),
+    constraint U_Measurment_Measurment_Type unique(MeasurmentType)
 )
 go 
 create table dbo.RecipeIngredient(
