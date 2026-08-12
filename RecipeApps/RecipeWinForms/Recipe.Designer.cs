@@ -56,7 +56,7 @@
             tblMain.RowCount = 2;
             tblMain.RowStyles.Add(new RowStyle());
             tblMain.RowStyles.Add(new RowStyle());
-            tblMain.Size = new Size(1391, 741);
+            tblMain.Size = new Size(939, 617);
             tblMain.TabIndex = 0;
             // 
             // lblRecipe
@@ -73,6 +73,7 @@
             // 
             // gRecipe
             // 
+            gRecipe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             gRecipe.BackgroundColor = SystemColors.ControlLightLight;
             gRecipe.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             tblMain.SetColumnSpan(gRecipe, 3);
@@ -86,7 +87,6 @@
             // 
             // btnSearch
             // 
-            btnSearch.Anchor = AnchorStyles.Left;
             btnSearch.Location = new Point(280, 3);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(153, 51);
@@ -96,7 +96,7 @@
             // 
             // txtRecipe
             // 
-            txtRecipe.Dock = DockStyle.Fill;
+            txtRecipe.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtRecipe.Location = new Point(84, 3);
             txtRecipe.Multiline = true;
             txtRecipe.Name = "txtRecipe";
@@ -107,7 +107,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1391, 741);
+            ClientSize = new Size(939, 617);
             Controls.Add(tblMain);
             Name = "Recipe";
             Text = "Recipe";

@@ -15,6 +15,22 @@ namespace RecipeWinForms
         {
             txt.DataBindings.Add("Text", dt, ColoumnName);
         }
+
+        private void Dates(TextBox txt)
+        {
+            if(txt.Text == "")
+            {
+                txt.ReadOnly = false;
+            }
+        }
+
+        private void Dates()
+        {
+            Dates(txtDatePublished);
+            Dates(txtDateDrafted);
+            Dates(txtDateArchived);
+        }
+
         public void ShowForm(int RecipeId)
         {
             string sql = "select RecipeId, RecipeName, DateDrafted, DatePublished, DateArchived, Calories, Statuses, PictureRecipe from Recipe r where RecipeId = " + RecipeId;
@@ -26,8 +42,9 @@ namespace RecipeWinForms
             DataBinding(txtRecipeName, "RecipeName", dt);
             DataBinding(txtCalories, "Calories", dt);
             DataBinding(txtStatuses, "Statuses", dt);
-            pbPictureRecipe.DataBindings.Add("Text", dt, "PictureRecipe");
             this.Show();
+            Dates();
         }
+
     }
 }
