@@ -40,7 +40,6 @@ create table dbo.Ingredient(
     constraint Ingredient_Ingredient_Name_not_blank check(IngredientName <> ''),
     PictureIngredient as concat('Ingredient_', replace(ingredientname, ' ', '_' ), '.jpg')
 )
---AS Remove all this commented out code
 
 go 
 create table dbo.Recipe(
