@@ -79,3 +79,4 @@ join Cuisine c
 on x.cuisine = c.CuisineType 
 join Users u 
 on x.UserName = u.UserName
+

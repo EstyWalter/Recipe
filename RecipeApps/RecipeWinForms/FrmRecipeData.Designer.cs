@@ -177,6 +177,7 @@
             txtRecipeName.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             txtRecipeName.Location = new Point(655, 151);
             txtRecipeName.Name = "txtRecipeName";
+            txtRecipeName.ScrollBars = ScrollBars.Both;
             txtRecipeName.Size = new Size(189, 27);
             txtRecipeName.TabIndex = 10;
             // 

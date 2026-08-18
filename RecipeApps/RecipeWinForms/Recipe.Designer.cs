@@ -59,21 +59,21 @@
             tblMain.RowCount = 2;
             tblMain.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tblMain.RowStyles.Add(new RowStyle(SizeType.Percent, 90F));
-            tblMain.Size = new Size(939, 617);
+            tblMain.Size = new Size(1237, 780);
             tblMain.TabIndex = 0;
             // 
             // gRecipe
             // 
             gRecipe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             gRecipe.BackgroundColor = Color.White;
-            gRecipe.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            gRecipe.ColumnHeadersHeight = 29;
             tblMain.SetColumnSpan(gRecipe, 4);
             gRecipe.Dock = DockStyle.Fill;
             gRecipe.GridColor = SystemColors.Info;
-            gRecipe.Location = new Point(3, 64);
+            gRecipe.Location = new Point(3, 81);
             gRecipe.Name = "gRecipe";
             gRecipe.RowHeadersWidth = 51;
-            gRecipe.Size = new Size(933, 550);
+            gRecipe.Size = new Size(1231, 696);
             gRecipe.TabIndex = 3;
             // 
             // btnNew
@@ -81,9 +81,9 @@
             btnNew.AutoSize = true;
             btnNew.BackColor = SystemColors.ButtonFace;
             btnNew.Dock = DockStyle.Fill;
-            btnNew.Location = new Point(705, 3);
+            btnNew.Location = new Point(930, 3);
             btnNew.Name = "btnNew";
-            btnNew.Size = new Size(231, 55);
+            btnNew.Size = new Size(304, 72);
             btnNew.TabIndex = 6;
             btnNew.Text = "New";
             btnNew.UseVisualStyleBackColor = false;
@@ -93,9 +93,9 @@
             btnSearch.AutoSize = true;
             btnSearch.BackColor = SystemColors.ButtonFace;
             btnSearch.Dock = DockStyle.Fill;
-            btnSearch.Location = new Point(471, 3);
+            btnSearch.Location = new Point(621, 3);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(228, 55);
+            btnSearch.Size = new Size(303, 72);
             btnSearch.TabIndex = 0;
             btnSearch.Text = "Search";
             btnSearch.UseVisualStyleBackColor = false;
@@ -103,10 +103,10 @@
             // txtRecipe
             // 
             txtRecipe.Dock = DockStyle.Fill;
-            txtRecipe.Location = new Point(237, 3);
+            txtRecipe.Location = new Point(312, 3);
             txtRecipe.Multiline = true;
             txtRecipe.Name = "txtRecipe";
-            txtRecipe.Size = new Size(228, 55);
+            txtRecipe.Size = new Size(303, 72);
             txtRecipe.TabIndex = 1;
             // 
             // lblRecipe
@@ -115,7 +115,7 @@
             lblRecipe.Font = new Font("Microsoft Tai Le", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblRecipe.Location = new Point(3, 0);
             lblRecipe.Name = "lblRecipe";
-            lblRecipe.Size = new Size(228, 61);
+            lblRecipe.Size = new Size(303, 78);
             lblRecipe.TabIndex = 1;
             lblRecipe.Text = "Recipe";
             lblRecipe.TextAlign = ContentAlignment.MiddleCenter;
@@ -124,7 +124,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(939, 617);
+            ClientSize = new Size(1237, 780);
             Controls.Add(tblMain);
             Name = "Recipe";
             Text = "Recipe";
