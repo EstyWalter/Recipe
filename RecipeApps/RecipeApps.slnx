@@ -1,5 +1,7 @@
 <Solution>
   <Project Path="../../CPUFramework/CPUFramework.csproj" />
   <Project Path="../../CPUWindowsFormFramework/CPUWindowsFormFramework.csproj" />
+  <Project Path="RecipeSystem/RecipeSystem.csproj" Id="10c13d44-cc1c-435b-ba7a-ef3d3e05663d" />
+  <Project Path="RecipeTest/HeartyHearthTest.csproj" Id="2eed5ac3-2375-4fec-94a4-2185ee6c8593" />
   <Project Path="RecipeWinForms/RecipeWinForms.csproj" />
 </Solution>
