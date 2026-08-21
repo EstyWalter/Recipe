@@ -14,35 +14,6 @@ go
  delete Cuisine
  delete Users
 
-go 
-insert users(FirstName, LastName, UserName)
-select 'Esther', 'Walter', 'Esty'
-union select 'Blimy', 'Brody', 'BLims'
-union select 'Chaya', 'Shweid', 'Chaya'
-union select 'Sarah', 'Pacini', 'Sury'
-
-go
-insert cuisine(CuisineType)
-select 'American'
-union select 'Italian'
-union select 'French'
-union select 'English'
-union select 'African'
-union select 'Greek'
-union select 'Thai'
- delete CookbookRecipe
- delete Cookbook
- delete MealCourseRecipe
- delete MealCourse
- delete Course
- delete Meal
- delete Directions 
- delete RecipeIngredient
- delete Recipe 
- delete Measurment
- delete Ingredient
- delete Cuisine
- delete Users
 
 go 
 insert users(FirstName, LastName, UserName)
@@ -60,6 +31,7 @@ union select 'English'
 union select 'African'
 union select 'Greek'
 union select 'Thai'
+
 go
 ;
 with x as(
@@ -80,3 +52,4 @@ on x.cuisine = c.CuisineType
 join Users u 
 on x.UserName = u.UserName
 
+delete recipe  where recipeid = 11
