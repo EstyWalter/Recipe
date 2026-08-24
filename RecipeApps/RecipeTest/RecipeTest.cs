@@ -10,7 +10,8 @@ namespace RecipeTest
         [SetUp]
         public void Setup()
         {
-            dbManager.SetConnectionString(//);
+            dbManager.SetConnectionString("Server = tcp:esty.database.windows.net,1433; Initial Catalog = HeartyHearthDB; Persist Security Info = False; User ID = Estyadmin; Password =Hiitsme!" +
+            "; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
         }
 
         private int Recipeid()
@@ -88,12 +89,13 @@ namespace RecipeTest
             TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
 
             DataTable dtRecipe = Recipe.SearchRecipeInfo(recipeid);
+            if (columnname == "RecipeName")
+            {
+                updatedvalue = updatedvalue + DateTime.Now;
+            }
             dtRecipe.Rows[0][columnname] = updatedvalue;
             TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " needs to be updated to " + updatedvalue);
-            if (columnname == "Recipename")
-            {
-                columnname = columnname + DateTime.Now;
-            }
+     
             Recipe.Save(dtRecipe);
             value = SQLUtility.GetFirstColumnsFirstRowValue("select " + columnname + " from recipe where recipeid = " + recipeid, "string").ToString();
 
