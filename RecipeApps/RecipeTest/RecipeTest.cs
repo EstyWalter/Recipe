@@ -78,6 +78,27 @@ namespace RecipeTest
 
 
         [Test]
+        [TestCase("Cuisineid")]
+        [TestCase("Usersid")]
+        [TestCase("calories")]
+        public void SaveInvalidInfoForRecipewithInt(string columnname)
+        {
+            int recipeid = Recipeid();
+            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
+            //int updatedvalue = SQLUtility.GetFirstColumnsFirstRowValueInt("select min(" + columnname + ") from recipe");
+            int updatedvalue = -1;
+            int value = SQLUtility.GetFirstColumnsFirstRowValueInt("select " + columnname + " from recipe where recipeid = " + recipeid);
+            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
+
+            DataTable dtRecipe = Recipe.SearchRecipeInfo(recipeid);
+            dtRecipe.Rows[0][columnname] = updatedvalue;
+            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " cannot be updated to " + updatedvalue);
+           Exception ex = Assert.Throws<Exception>(()=> Recipe.Save(dtRecipe));
+    
+            TestContext.WriteLine(ex.Message);
+        }
+
+        [Test]
         [TestCase("RecipeName", "I am updated")]
         [TestCase("DateDrafted", "1-1-2000 12:00:00 AM")]
 
@@ -110,6 +131,32 @@ namespace RecipeTest
                 ClassicAssert.IsTrue(updatedvalue == value, "The recipe where recipeid = " + recipeid + " " + columnname + " = " + value + " does not = " + updatedvalue);
             }
             TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + updatedvalue);
+        }
+
+        [Test]
+        [TestCase("RecipeName")]
+        [TestCase("DateDrafted")]
+        public void SaveInvalidInfoForRecipestring(string columnname)
+        {
+            int recipeid = Recipeid();
+            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
+            string updatevalue = "";
+            string value = SQLUtility.GetFirstColumnsFirstRowValue("select " + columnname + " from recipe where recipeid = " + recipeid, "string").ToString();
+            if(columnname == "DateDrafted")
+            {
+                updatevalue = DateTime.Now.ToString();
+            }
+            else
+            {
+               updatevalue = SQLUtility.GetFirstColumnsFirstRowValue("select " + columnname + " from recipe where recipeid <> " + recipeid, "string").ToString();
+               
+            }
+            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
+            DataTable dtRecipe = Recipe.SearchRecipeInfo(recipeid);
+            dtRecipe.Rows[0][columnname] = updatevalue;
+            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " needs to fail when trying to update to " + updatevalue);
+            Exception ex = Assert.Throws<Exception>(() => Recipe.Save(dtRecipe));
+            TestContext.WriteLine(ex.Message);
         }
 
         [Test]
@@ -148,6 +195,17 @@ namespace RecipeTest
             DataTable dtaftersave = SQLUtility.GetDataTable("select * from recipe r where recipeid = " + recipeid); 
             ClassicAssert.IsTrue(dtaftersave.Rows.Count == 0, "Recipe where recipeid = " + recipeid + " is not deleted from dbHeartyhearth");
             TestContext.WriteLine("recipe where recipeid = " + recipeid + " is deleted");
+        }
+
+        [Test]
+        public void FailToDeleteRecipeWithFK()
+        {
+            int recipeid = Recipeid();
+            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
+            TestContext.WriteLine("do not delete recipe, where recipeid = " + recipeid);
+            DataTable dt = SQLUtility.GetDataTable("select * from recipe r where recipeid = " + recipeid);
+            Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(recipeid, dt)); 
+            TestContext.WriteLine(ex.Message);
         }
 
         [Test]
