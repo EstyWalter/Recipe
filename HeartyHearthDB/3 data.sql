@@ -73,7 +73,7 @@ select cuisine = 'Italian', UserName = 'Esty',  DateDrafted = '3-1-2026', DatePu
 union select 'American', 'BLims', '4-12-2025', '7-15-2025', null, 'Chocolate Chip Cookies', 360
 union select 'French', 'Chaya', '3-05-2024', '6-18-2024', '12-10-2025', 'Apple Yogurt Smoothie', 190
 union select 'English', 'Sury', '8-21-2024', null, '2-10-2026', 'Cheese Bread', 430
-union select 'American', 'BLims', '6-03-2025', '8-09-2025', null, 'Butter Muffins', 410
+union select 'American', 'BLims', '6-03-2025', '8-09-2025', '8-10-2025', 'Butter Muffins', 410
 union select 'American', 'Chaya', '5-11-2024', '9-20-2024', null, 'Banana Oat Muffins', 300
 union select 'American', 'Sury', '1-17-2026', '2-01-2026', null, 'Strawberry Milkshake', 270
 union select 'Italian', 'BLims', '9-09-2025', null, null, 'Garlic Butter Pasta', 520
@@ -98,7 +98,7 @@ union select 'oz'
 union select 'pound'
 union select 'pinch'
 
-go
+
 ;
 with x as(
 select Recipename = 'Garlic Butter Pasta', Ingredientname = 'pasta', ingredientsequence = '1', measurmenttype = 'cup', amount = '2'
@@ -331,13 +331,13 @@ union select 'Savory Delights', 'Apple Yogurt Smoothie', 2
 union select 'Savory Delights', 'Cheese Bread', 3
 union select 'Savory Delights', 'Butter Muffins', 4
 union select 'Savory Delights', 'Strawberry Milkshake', 5
-union select 'Savory Delights', 'Garlic Butter Pasta', 6
+union select 'Savory Delights', 'Chocolate Chip Cookies', 6
 union select 'Whisked Away Delights', 'Apple Yogurt Smoothie', 1
 union select 'Whisked Away Delights', 'Cheese Bread', 2
 union select 'Whisked Away Delights', 'Banana Oat Muffins', 3
 union select 'Whisked Away Delights', 'Strawberry Milkshake', 4
 union select 'The Tasty Trio Collection', 'Chocolate Chip Cookies', 1
-union select 'The Tasty Trio Collection', 'Garlic Butter Pasta', 2
+union select 'The Tasty Trio Collection', 'Banana Oat Muffins', 2
 )
 insert CookbookRecipe(Cookbookid, recipeid, RecipeSequence)
 select cb.CookbookId, r.RecipeId, x.recipesequence

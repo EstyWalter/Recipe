@@ -1,4 +1,4 @@
-use HeartyHearthDB
+
 go
 drop table if exists CookbookRecipe
 drop table if exists Cookbook

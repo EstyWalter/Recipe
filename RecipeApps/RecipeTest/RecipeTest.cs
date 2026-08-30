@@ -10,7 +10,8 @@ namespace RecipeTest
         [SetUp]
         public void Setup()
         {
-            dbManager.SetConnectionString//
+            dbManager.SetConnectionString("Server = tcp:esty.database.windows.net,1433; Initial Catalog = HeartyHearthDB; Persist Security Info = False; User ID = Estyadmin; Password =Hiitsme!" +
+            "; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
         }
 
         private int Recipeid()
@@ -184,14 +185,26 @@ namespace RecipeTest
         }
 
         [Test]
+        public void FailToDeleteRecipeWhenViolatingBusinessRule()
+        {
+            int recipeid = SQLUtility.GetFirstColumnsFirstRowValueInt("select recipeid from recipe r where statuses = 'Published' or (statuses = 'Archived' and datediff(day, isnull(DatePublished, DateDrafted),  DateArchived) <= 30)");
+            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
+            TestContext.WriteLine("do not delete recipe where recipeid = " + recipeid);
+            DataTable dt = SQLUtility.GetDataTable("select recipeid from recipe r where recipeid =" + recipeid);
+            Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(recipeid, dt));
+            TestContext.WriteLine(ex.Message);
+        }
+
+
+        [Test]
         public void DeleteRecipe()
         {
-            int recipeid = Recipeid();
+            int recipeid = SQLUtility.GetFirstColumnsFirstRowValueInt("select recipeid from recipe r where statuses = 'Drafted'");
             Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
             TestContext.WriteLine("delete recipe where recipeid = " + recipeid);
             DataTable dt = SQLUtility.GetDataTable("select * from recipe r where recipeid = " + recipeid);
             Recipe.Delete(recipeid, dt);
-            DataTable dtaftersave = SQLUtility.GetDataTable("select * from recipe r where recipeid = " + recipeid); 
+            DataTable dtaftersave = SQLUtility.GetDataTable("select * from recipe r where recipeid = " + recipeid);
             ClassicAssert.IsTrue(dtaftersave.Rows.Count == 0, "Recipe where recipeid = " + recipeid + " is not deleted from dbHeartyhearth");
             TestContext.WriteLine("recipe where recipeid = " + recipeid + " is deleted");
         }
