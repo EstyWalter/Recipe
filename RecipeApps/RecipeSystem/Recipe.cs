@@ -38,29 +38,34 @@ namespace RecipeSystem
 
         public static void Save(DataTable dtRecipe)
         {
-            SQLUtility.DebugPrintDataTable(dtRecipe);
+            if (dtRecipe.Rows.Count == 0)
+            {
+                throw new Exception("cannot call recipe save method because there are no rows in table");
+            }
+            //SQLUtility.DebugPrintDataTable(dtRecipe);
             DataRow r = dtRecipe.Rows[0];
-            int id = (int)r["RecipeId"];
-            string sql = "";
-            if (id > 0)
-            {
-                sql = string.Join(Environment.NewLine, $"update Recipe set ",
-                  $"CuisineId = '{r["CuisineId"]}', ",
-                  $"UsersId = '{r["UsersId"]}', ",
-                  $"DateDrafted = '{r["DateDrafted"]}', ",
-                  $"RecipeName = '{r["RecipeName"]}', ",
-                  $"Calories = '{r["Calories"]}' ",
-                  $"where RecipeId = {r["RecipeId"]} "
-                  );
-            }
-            else
-            {
-                sql = "insert Recipe(CuisineId, UsersId, DateDrafted, RecipeName, Calories)";
-                sql += $"select '{r["CuisineId"]}', '{r["UsersId"]}','{r["DateDrafted"]}', '{r["RecipeName"]}', '{r["Calories"]}'";
-            }
-            Debug.Print("----------");
-            Debug.Print(sql);
-            SQLUtility.ExecuteSQL(sql);
+            SQLUtility.SaveDataRow(r, "RecipeUpdate");
+          // int id = (int)r["RecipeId"];
+          // string sql = "";
+          // if (id > 0)
+          // {
+          //     sql = string.Join(Environment.NewLine, $"update Recipe set ",
+          //       $"CuisineId = '{r["CuisineId"]}', ",
+          //       $"UsersId = '{r["UsersId"]}', ",
+          //       $"DateDrafted = '{r["DateDrafted"]}', ",
+          //       $"RecipeName = '{r["RecipeName"]}', ",
+          //       $"Calories = '{r["Calories"]}' ",
+          //       $"where RecipeId = {r["RecipeId"]} "
+          //       );
+          // }
+          // else
+          // {
+          //     sql = "insert Recipe(CuisineId, UsersId, DateDrafted, RecipeName, Calories)";
+          //     sql += $"select '{r["CuisineId"]}', '{r["UsersId"]}','{r["DateDrafted"]}', '{r["RecipeName"]}', '{r["Calories"]}'";
+          // }
+          // Debug.Print("----------");
+          // Debug.Print(sql);
+          // SQLUtility.ExecuteSQL(sql);
         }
 
         public static void Delete(int id, DataTable dtrecipe)

@@ -5,7 +5,9 @@ namespace RecipeWinForms
 {
     public partial class FrmRecipeData : Form
     {
-        DataTable dtRecipe;
+
+        DataTable dtRecipe = new DataTable();
+        BindingSource bindsource = new BindingSource();
         public FrmRecipeData()
         {
             InitializeComponent();
@@ -13,9 +15,16 @@ namespace RecipeWinForms
             btnSave.Click += BtnSave_Click;
         }
 
-        public void ShowForm(int recipeid)
-        {
+        
+        public void ShowForm(int recipeid){
             dtRecipe = Recipe.SearchRecipeInfo(recipeid);
+            bindsource.DataSource = dtRecipe;
+            WindowsFormsUtility.SetControlBinding(txtDateDrafted, bindsource);
+            WindowsFormsUtility.SetControlBinding(txtDatePublished, bindsource);
+            WindowsFormsUtility.SetControlBinding(txtDateArchived, bindsource);
+            WindowsFormsUtility.SetControlBinding(txtRecipeName, bindsource);
+            WindowsFormsUtility.SetControlBinding(txtCalories, bindsource);
+            WindowsFormsUtility.SetControlBinding(txtStatuses, bindsource);
             if (recipeid == 0)
             {
                 dtRecipe.Rows.Add();
@@ -25,12 +34,7 @@ namespace RecipeWinForms
             WindowsFormsUtility.SetListBinding(lstUserName, dtUsers, dtRecipe, "Users");
             DataTable dtCuisine = Recipe.GetCuisineDataTable();
             WindowsFormsUtility.SetListBinding(lstCuisineType, dtCuisine, dtRecipe, "Cuisine");
-            WindowsFormsUtility.SetControlBinding(txtDateDrafted, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtDatePublished, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtDateArchived, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtRecipeName, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtCalories, dtRecipe);
-            WindowsFormsUtility.SetControlBinding(txtStatuses, dtRecipe);
+        
             this.Show();
         }
 

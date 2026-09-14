@@ -199,7 +199,7 @@ namespace RecipeTest
         [Test]
         public void DeleteRecipe()
         {
-            int recipeid = SQLUtility.GetFirstColumnsFirstRowValueInt("select recipeid from recipe r where statuses = 'Drafted'");
+            int recipeid = SQLUtility.GetFirstColumnsFirstRowValueInt("select recipeid from recipe r where statuses <> 'Published' or (statuses = 'Archived' and datediff(day, DateArchived, getdate()) >= 30)");
             Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
             TestContext.WriteLine("delete recipe where recipeid = " + recipeid);
             DataTable dt = SQLUtility.GetDataTable("select * from recipe r where recipeid = " + recipeid);
