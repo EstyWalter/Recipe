@@ -154,3 +154,4 @@ create table dbo.CookbookRecipe(
     constraint Ck_cookbook_Recipe_Recipe_Sequence_not_neg check(RecipeSequence > 0),
     constraint U_Cookbook_Recipe_Cookbookid_Recipeid unique(cookbookid, recipeid)
 )
+
