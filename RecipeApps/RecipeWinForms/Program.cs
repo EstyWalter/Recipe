@@ -14,7 +14,7 @@ namespace RecipeWinForms
             ApplicationConfiguration.Initialize();
             dbManager.SetConnectionString("Server = tcp:esty.database.windows.net,1433; Initial Catalog = HeartyHearthDB; Persist Security Info = False; User ID = Estyadmin; Password =Hiitsme!" +
             "; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
-            Application.Run(new frmRecipe());
+            Application.Run(new frmMain());
         }
     }
 }

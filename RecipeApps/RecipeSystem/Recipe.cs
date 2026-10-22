@@ -1,38 +1,22 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Diagnostics;
-using System.Security.Cryptography;
 
 namespace RecipeSystem
 {
 
     public class Recipe
     {
-        public static DataTable SearchByRecipeName(string recipename)
+        public static DataTable ListRecipes()
+        {
+            SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeList");
+            return SQLUtility.GetDataTable(cmd);
+        }
+
+        public static DataTable GetRecipe(string parametername, int paramvalue, int paramvalue2 = 0)
         {
             SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeGet");
-            cmd.Parameters["@RecipeName"].Value = recipename;
-            return SQLUtility.GetDataTable(cmd);
-        }
-
-        public static DataTable SearchRecipeInfo(int recipeid)
-        {
-            SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeGet");
-            cmd.Parameters["@RecipeId"].Value = recipeid;
-            return SQLUtility.GetDataTable(cmd);
-        }
-
-        public static DataTable GetCuisineDataTable()
-        {
-            SqlCommand cmd = SQLUtility.GetSqlCommand("CuisineGet");
-            cmd.Parameters["@All"].Value = 1;
-            return SQLUtility.GetDataTable(cmd);
-        }
-
-        public static DataTable GetUsersDataTable()
-        {
-            SqlCommand cmd = SQLUtility.GetSqlCommand("UsersGet");
-            cmd.Parameters["@All"].Value = 1;
+            cmd.Parameters[parametername].Value = paramvalue;
+            cmd.Parameters["@IncludeBlank"].Value = paramvalue2;
             return SQLUtility.GetDataTable(cmd);
         }
 
@@ -42,30 +26,8 @@ namespace RecipeSystem
             {
                 throw new Exception("cannot call recipe save method because there are no rows in table");
             }
-            //SQLUtility.DebugPrintDataTable(dtRecipe);
             DataRow r = dtRecipe.Rows[0];
             SQLUtility.SaveDataRow(r, "RecipeUpdate");
-          // int id = (int)r["RecipeId"];
-          // string sql = "";
-          // if (id > 0)
-          // {
-          //     sql = string.Join(Environment.NewLine, $"update Recipe set ",
-          //       $"CuisineId = '{r["CuisineId"]}', ",
-          //       $"UsersId = '{r["UsersId"]}', ",
-          //       $"DateDrafted = '{r["DateDrafted"]}', ",
-          //       $"RecipeName = '{r["RecipeName"]}', ",
-          //       $"Calories = '{r["Calories"]}' ",
-          //       $"where RecipeId = {r["RecipeId"]} "
-          //       );
-          // }
-          // else
-          // {
-          //     sql = "insert Recipe(CuisineId, UsersId, DateDrafted, RecipeName, Calories)";
-          //     sql += $"select '{r["CuisineId"]}', '{r["UsersId"]}','{r["DateDrafted"]}', '{r["RecipeName"]}', '{r["Calories"]}'";
-          // }
-          // Debug.Print("----------");
-          // Debug.Print(sql);
-          // SQLUtility.ExecuteSQL(sql);
         }
 
         public static void Delete(int id, DataTable dtrecipe)
@@ -73,6 +35,11 @@ namespace RecipeSystem
             SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeDelete");
             cmd.Parameters["@RecipeId"].Value = id;
             SQLUtility.GetDataTable(cmd);
+        }
+
+        public static int FindRecipeId(DataTable dtRecipe)
+        {
+            return SQLUtility.GetValueFromFirstRowAsInt(dtRecipe, "RecipeId");
         }
     }
 }

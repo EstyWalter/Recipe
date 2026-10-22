@@ -1,61 +1,79 @@
 --Note: some of these scripts are needed for specific items, when the instructions say "specific" pick one item in your data and specify it in the where clause using a unique value that identifies it, do not use the primary key.
 
 --1) Sometimes when a staff member is fired. We need to eradicate everything from that user in our system. Write the SQL to delete a specific user and all the user's related records.
---select * 
-delete cr 
-from cookbookrecipe cr 
-join cookbook c 
-on c.cookbookid = cr.cookbookid 
-join users u 
-on u.usersid = c.usersid 
-where u.username = 'Esty'
 
---select * 
-delete c
-from cookbook c  
-join users u 
-on u.usersid = c.usersid 
-where u.username = 'Esty'
+    -- 1. Delete directions for Blims's recipes
+    DELETE d
+    FROM Directions d
+    JOIN Recipe r ON r.RecipeId = d.RecipeId
+    JOIN Users u ON u.UsersId = r.UsersId
+    WHERE u.UserName = 'Blims';
 
-delete mcr
---select * 
-from meal m 
-join mealcourse mc 
-on m.mealid = mc.mealid 
-join mealcourserecipe mcr 
-on mcr.mealCourseid = mc.mealcourseid
-join users u 
-on m.usersid = u.usersid 
-where u.username = 'Esty'
+    -- 2. Delete ingredients for Blims's recipes
+    DELETE ri
+    FROM RecipeIngredient ri
+    JOIN Recipe r ON r.RecipeId = ri.RecipeId
+    JOIN Users u ON u.UsersId = r.UsersId
+    WHERE u.UserName = 'Blims';
 
-delete mc
---select * 
-from meal m 
-join mealcourse mc 
-on m.mealid = mc.mealid 
-join users u 
-on m.usersid = u.usersid 
-where u.username = 'Esty'
+    -- 3. Delete cookbook references to Blims's recipes
+    DELETE cr
+    FROM CookbookRecipe cr
+    JOIN Recipe r ON r.RecipeId = cr.RecipeId
+    JOIN Users u ON u.UsersId = r.UsersId
+    WHERE u.UserName = 'Blims';
 
+    -- 4. Delete meal-course references to Blims's recipes
+    DELETE mcr
+    FROM MealCourseRecipe mcr
+    JOIN Recipe r ON r.RecipeId = mcr.RecipeId
+    JOIN Users u ON u.UsersId = r.UsersId
+    WHERE u.UserName = 'Blims';
 
-delete m 
---select * 
-from meal m 
-join users u 
-on m.usersid = u.usersid 
-where u.username = 'Esty'
+    -- 5. Delete remaining meal-course-recipe records
+    -- belonging to Blims's meals
+    DELETE mcr
+    FROM MealCourseRecipe mcr
+    JOIN MealCourse mc ON mc.MealCourseId = mcr.MealCourseId
+    JOIN Meal m ON m.MealId = mc.MealId
+    JOIN Users u ON u.UsersId = m.UsersId
+    WHERE u.UserName = 'Blims';
 
---select * 
-delete r 
-from recipe r  
-join users u 
-on u.usersid = r.usersid 
-where u.username = 'Esty'
+    -- 6. Delete cookbook references in Blims's cookbooks
+    DELETE cr
+    FROM CookbookRecipe cr
+    JOIN Cookbook c ON c.CookbookId = cr.CookbookId
+    JOIN Users u ON u.UsersId = c.UsersId
+    WHERE u.UserName = 'Blims';
 
-delete u
---select * 
-from users u 
-where u.username = 'Esty'
+    -- 7. Delete Blims's cookbooks
+    DELETE c
+    FROM Cookbook c
+    JOIN Users u ON u.UsersId = c.UsersId
+    WHERE u.UserName = 'Blims';
+
+    -- 8. Delete meal courses belonging to Blims's meals
+    DELETE mc
+    FROM MealCourse mc
+    JOIN Meal m ON m.MealId = mc.MealId
+    JOIN Users u ON u.UsersId = m.UsersId
+    WHERE u.UserName = 'Blims';
+
+    -- 9. Delete Blims's meals
+    DELETE m
+    FROM Meal m
+    JOIN Users u ON u.UsersId = m.UsersId
+    WHERE u.UserName = 'Blims';
+
+    -- 10. Delete Blims's recipes
+    DELETE r
+    FROM Recipe r
+    JOIN Users u ON u.UsersId = r.UsersId
+    WHERE u.UserName = 'Blims';
+
+    -- 11. Delete Blims's user record
+    DELETE FROM Users
+    WHERE UserName = 'Blims';
 
 --2) Sometimes we want to clone a recipe as a starting point and then edit it. For example we have a complex recipe (steps and ingredients) and want to make a modified version. Write the SQL that clones a specific recipe, add " - clone" to its name
 insert Recipe (CuisineId, UsersId, DateDrafted, DatePublished, DateArchived, RecipeName, Calories)

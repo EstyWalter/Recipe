@@ -157,10 +157,8 @@ select r.RecipeId, i.IngredientId, x.ingredientsequence, m.MeasurmentId, x.amoun
 from x 
 join Recipe r 
 on r.RecipeName = x.Recipename
-join RecipeIngredient ri
-on r.RecipeId = ri.recipeid 
 join Ingredient i 
-on ri.ingredientid = i.IngredientId 
+on i.ingredientname = x.IngredientName
 join Measurment m 
 on m.measurmenttype = x.measurmenttype 
 
@@ -331,7 +329,6 @@ union select 'Savory Delights', 'Apple Yogurt Smoothie', 2
 union select 'Savory Delights', 'Cheese Bread', 3
 union select 'Savory Delights', 'Butter Muffins', 4
 union select 'Savory Delights', 'Strawberry Milkshake', 5
-union select 'Savory Delights', 'Chocolate Chip Cookies', 6
 union select 'Whisked Away Delights', 'Apple Yogurt Smoothie', 1
 union select 'Whisked Away Delights', 'Cheese Bread', 2
 union select 'Whisked Away Delights', 'Banana Oat Muffins', 3
@@ -340,9 +337,12 @@ union select 'The Tasty Trio Collection', 'Chocolate Chip Cookies', 1
 union select 'The Tasty Trio Collection', 'Banana Oat Muffins', 2
 )
 insert CookbookRecipe(Cookbookid, recipeid, RecipeSequence)
-select cb.CookbookId, r.RecipeId, x.recipesequence
+select distinct cb.CookbookId, r.RecipeId, x.recipesequence
 from x 
 join Cookbook cb 
 on cb.BookName = x.bookname
 join recipe r 
 on r.RecipeName = x.recipename
+
+
+

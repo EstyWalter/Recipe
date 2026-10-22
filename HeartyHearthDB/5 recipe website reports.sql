@@ -88,19 +88,7 @@ where m.MealActive = 1
 group by m.MealName, u.UserName
 order by m.MealName 
 
-select m.MealName, u.UserName, SumOfCalories = sum(r.Calories), NumOfRecipes = count(distinct mcr.RecipeId), NumOfCourses = count(distinct mc.courseid)
-from meal m 
-join MealCourse mc 
-on m.mealid = mc.mealid  
-join MealCourseRecipe mcr 
-on mc.MealCourseId = mcr.mealCourseId
-join Recipe r 
-on mcr.RecipeId = r.RecipeId 
-join Users u 
-on m.UsersId = u.UsersId 
-where m.MealActive = 1
-group by m.MealName, u.UserName
-order by m.MealName 
+
 /*
 Meal details page:
     Show for a specific meal:

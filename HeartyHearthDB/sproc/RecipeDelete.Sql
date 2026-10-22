@@ -6,7 +6,7 @@ as
 begin 
 
 	declare @return int = 0
-	
+	select @RecipeId = isnull(@RecipeId, 0)
 
 	if exists (select recipeid from recipe r where recipeid = @recipeid and (statuses = 'Published' or (statuses = 'Archived' and datediff(day, DateArchived, getdate()) < 30)))
 		begin

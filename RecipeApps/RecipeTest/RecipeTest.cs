@@ -26,7 +26,7 @@ namespace RecipeTest
             Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
             TestContext.WriteLine("a id from HeartyHearthdb in table Recipe = " + recipeid);
             TestContext.WriteLine("Ensure that app loads Recipeid " + recipeid);
-            DataTable dtRecipe = Recipe.SearchRecipeInfo(recipeid);
+            DataTable dtRecipe = Recipe.SearchRecipeWithId(recipeid);
             int loadedid = (int)dtRecipe.Rows[0]["Recipeid"];
             ClassicAssert.IsTrue(loadedid == recipeid, "Recipeid from database" + recipeid + "does not = " + loadedid + "from RecipeApp");
             TestContext.WriteLine("loadedid = " + loadedid + " The RecipeInfo has loaded the correct info from dbHeartyHearth");
@@ -66,7 +66,7 @@ namespace RecipeTest
             }
             TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
 
-            DataTable dtRecipe = Recipe.SearchRecipeInfo(recipeid);
+            DataTable dtRecipe = Recipe.SearchRecipeWithId(recipeid);
             dtRecipe.Rows[0][columnname] = updatedvalue;
             TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " needs to be updated to " + updatedvalue);
             Recipe.Save(dtRecipe);
@@ -90,7 +90,7 @@ namespace RecipeTest
             int value = SQLUtility.GetFirstColumnsFirstRowValueInt("select " + columnname + " from recipe where recipeid = " + recipeid);
             TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
 
-            DataTable dtRecipe = Recipe.SearchRecipeInfo(recipeid);
+            DataTable dtRecipe = Recipe.SearchRecipeWithId(recipeid);
             dtRecipe.Rows[0][columnname] = updatedvalue;
             TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " cannot be updated to " + updatedvalue);
            Exception ex = Assert.Throws<Exception>(()=> Recipe.Save(dtRecipe));
@@ -109,7 +109,7 @@ namespace RecipeTest
             string value = SQLUtility.GetFirstColumnsFirstRowValue("select " + columnname + " from recipe where recipeid = " + recipeid, "string").ToString();
             TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
 
-            DataTable dtRecipe = Recipe.SearchRecipeInfo(recipeid);
+            DataTable dtRecipe = Recipe.SearchRecipeWithId(recipeid);
             if (columnname == "RecipeName")
             {
                 updatedvalue = updatedvalue + DateTime.Now;
@@ -152,7 +152,7 @@ namespace RecipeTest
                
             }
             TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
-            DataTable dtRecipe = Recipe.SearchRecipeInfo(recipeid);
+            DataTable dtRecipe = Recipe.SearchRecipeWithId(recipeid);
             dtRecipe.Rows[0][columnname] = updatevalue;
             TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " needs to fail when trying to update to " + updatevalue);
             Exception ex = Assert.Throws<Exception>(() => Recipe.Save(dtRecipe));
