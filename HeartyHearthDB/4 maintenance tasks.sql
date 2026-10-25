@@ -88,14 +88,14 @@ join Directions d
 on r.RecipeId = d.RecipeId
 where r.RecipeName = 'Chocolate Chip Cookies'
 
-insert RecipeIngredient(RecipeId, IngredientId, IngredientSequence, MeasurmentId, Amount)
+insert RecipeIngredient(RecipeId, IngredientId, IngredientSequence, MeasurementId, Amount)
 select (select r.RecipeId from Recipe r where r.RecipeName = 'Chocolate Chip Cookies - clone'),  
-ri.IngredientId, ri.IngredientSequence, m.MeasurmentId, ri.Amount
+ri.IngredientId, ri.IngredientSequence, m.MeasurementId, ri.Amount
 from Recipe r
 join recipeIngredient ri 
 on r.RecipeId = ri.RecipeId 
-join Measurment m 
-on m.MeasurmentId = ri.MeasurmentId 
+join Measurement m 
+on m.MeasurementId = ri.MeasurementId 
 where r.RecipeName = 'Chocolate Chip Cookies'
 
 /*
@@ -164,15 +164,15 @@ The statement should include at least two measurement types, like the example ab
 update r 
 --select
 set r.calories = case 
-when  i.ingredientname = 'vanilla sugar' and m.MeasurmentType = 'tbsp' then ri.amount * 7 + r.calories 
-when i.ingredientname = 'vanilla sugar' and m.MeasurmentType = 'tsp' then ri.amount * 5 + r.calories
+when  i.ingredientname = 'vanilla sugar' and m.MeasurementType = 'tbsp' then ri.amount * 7 + r.calories 
+when i.ingredientname = 'vanilla sugar' and m.MeasurementType = 'tsp' then ri.amount * 5 + r.calories
 else r.calories 
 end
 from recipe r 
 join RecipeIngredient ri 
 on ri.recipeid = r.recipeid
-join Measurment m 
-on m.MeasurmentId = ri.MeasurmentId
+join Measurement m 
+on m.MeasurementId = ri.MeasurementId
 join ingredient i 
 on i.ingredientid = ri.ingredientid 
 where i.IngredientName = 'vanilla sugar'

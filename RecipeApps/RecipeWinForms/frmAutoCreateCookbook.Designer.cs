@@ -34,7 +34,7 @@
             // 
             // btnCreateCookbook
             // 
-            btnCreateCookbook.Location = new Point(309, 13);
+            btnCreateCookbook.Location = new Point(224, 12);
             btnCreateCookbook.Name = "btnCreateCookbook";
             btnCreateCookbook.Size = new Size(219, 66);
             btnCreateCookbook.TabIndex = 1;
@@ -46,7 +46,7 @@
             lstUserName.FormattingEnabled = true;
             lstUserName.Location = new Point(33, 33);
             lstUserName.Name = "lstUserName";
-            lstUserName.Size = new Size(217, 28);
+            lstUserName.Size = new Size(170, 28);
             lstUserName.TabIndex = 0;
             // 
             // frmAutoCreateCookbook

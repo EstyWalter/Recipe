@@ -9,7 +9,7 @@ go
  delete Directions 
  delete RecipeIngredient
  delete Recipe 
- delete Measurment
+ delete Measurement
  delete Ingredient
  delete Cuisine
  delete Users

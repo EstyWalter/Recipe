@@ -5,7 +5,7 @@ namespace RecipeWinForms
 {
     public partial class frmDataMaintenance : Form
     {
-        private enum TableTypeEnum { Users, Cuisine, Ingredient, Measurment, course }
+        private enum TableTypeEnum { Users, Cuisine, Ingredient, Measurement, course }
 
         TableTypeEnum currenttable = TableTypeEnum.Users;
 
@@ -14,14 +14,17 @@ namespace RecipeWinForms
         {
             InitializeComponent();
             optUsers.Click += Opt_Click;
-            optMeasurments.Click += Opt_Click;
+            optMeasurements.Click += Opt_Click;
             optCuisine.Click += Opt_Click;
             optCourse.Click += Opt_Click;
             optIngredient.Click += Opt_Click;
             gData.CellContentClick += GData_CellContentClick;
             btnSave.Click += BtnSave_Click;
+            gData.DataError += GData_DataError;
             BindData(currenttable);
         }
+
+
 
         private void BindData(TableTypeEnum tableType)
         {
@@ -45,7 +48,7 @@ namespace RecipeWinForms
                 optCuisine.Tag = TableTypeEnum.Cuisine;
                 optIngredient.Tag = TableTypeEnum.Ingredient;
                 optUsers.Tag = TableTypeEnum.Users;
-                optMeasurments.Tag = TableTypeEnum.Measurment;
+                optMeasurements.Tag = TableTypeEnum.Measurement;
             }
         }
 
@@ -64,14 +67,17 @@ namespace RecipeWinForms
                 {
                     try
                     {
-                        if(currenttable == TableTypeEnum.Users)
+                        String message = "Are you sure you want to delete this " + currenttable.ToString();
+                        if (currenttable == TableTypeEnum.Users)
                         {
-                            var response = MessageBox.Show("Are you sure you want to delete this user and all related recipes, meals and cookbooks?", "Recipe", MessageBoxButtons.YesNo);
+                            message = "Are you sure you want to delete this user and all related recipes, meals and cookbooks?";
+                        }
+                            var response = MessageBox.Show(message, Application.ProductName, MessageBoxButtons.YesNo);
                             if (response == DialogResult.No)
                             {
                                 return;
                             }
-                        }
+                        
                         DataMaintenance.DeleteRow(id, currenttable.ToString());
                         gData.Rows.RemoveAt(row);
                     }
@@ -91,8 +97,21 @@ namespace RecipeWinForms
         private bool SaveData(TableTypeEnum tableType)
         {
             bool b = false;
-            DataMaintenance.UpdateTable(dtlist, tableType.ToString());
-            return b; 
+            Application.UseWaitCursor = true;
+            try
+            {
+                DataMaintenance.UpdateTable(dtlist, tableType.ToString());
+                b = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Application.ProductName);
+            }
+            finally
+            {
+                Application.UseWaitCursor = false;
+            }
+            return b;
         }
 
         private void C_Click(object? sender, EventArgs e)
@@ -102,6 +121,11 @@ namespace RecipeWinForms
                 BindData((TableTypeEnum)((Control)sender).Tag);
             }
 
+        }
+
+        private void GData_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            WindowsFormsUtility.DataError();
         }
 
         private void GData_CellContentClick(object? sender, DataGridViewCellEventArgs e)

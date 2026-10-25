@@ -1,5 +1,6 @@
 ﻿using CPUFramework;
 using System.Data;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RecipeWinForms
 {
@@ -46,11 +47,14 @@ namespace RecipeWinForms
                     switch (btn.Name)
                     {
                         case "btnDrafted":
+                            ClearOldStatus("DatePublished");
+                            ClearOldStatus("DateArchived");
                             SaveNewStatus(txtDateDrafted);
                             Recipe.Save(dt);
                             break;
                         case "btnPublished":
                             SaveNewStatus(txtDatePublished);
+                            ClearOldStatus("DateArchived");
                             Recipe.Save(dt);
                             break;
                         case "btnArchived":
@@ -73,6 +77,11 @@ namespace RecipeWinForms
                 }
             }
 
+        }
+
+        private void ClearOldStatus(string columnname)
+        {
+            dt.Rows[0][columnname] = DBNull.Value;
         }
 
         private void SaveNewStatus(TextBox txt)

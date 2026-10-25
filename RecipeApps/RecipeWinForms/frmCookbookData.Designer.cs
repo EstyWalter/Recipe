@@ -58,7 +58,7 @@
             lblUser.Dock = DockStyle.Fill;
             lblUser.Location = new Point(3, 74);
             lblUser.Name = "lblUser";
-            lblUser.Size = new Size(158, 37);
+            lblUser.Size = new Size(142, 37);
             lblUser.TabIndex = 5;
             lblUser.Text = "User";
             lblUser.TextAlign = ContentAlignment.MiddleCenter;
@@ -84,8 +84,8 @@
             // tblCookbookEdit
             // 
             tblCookbookEdit.ColumnCount = 2;
-            tblCookbookEdit.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.990859F));
-            tblCookbookEdit.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85.00914F));
+            tblCookbookEdit.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.5283365F));
+            tblCookbookEdit.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 86.4716644F));
             tblCookbookEdit.Controls.Add(btnSave, 0, 0);
             tblCookbookEdit.Controls.Add(btnDelete, 1, 0);
             tblCookbookEdit.Controls.Add(lblPrice, 0, 4);
@@ -115,7 +115,7 @@
             btnSave.Dock = DockStyle.Fill;
             btnSave.Location = new Point(3, 3);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(158, 31);
+            btnSave.Size = new Size(142, 31);
             btnSave.TabIndex = 8;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = true;
@@ -123,7 +123,7 @@
             // btnDelete
             // 
             btnDelete.Dock = DockStyle.Left;
-            btnDelete.Location = new Point(167, 3);
+            btnDelete.Location = new Point(151, 3);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(121, 31);
             btnDelete.TabIndex = 9;
@@ -136,7 +136,7 @@
             lblPrice.Dock = DockStyle.Fill;
             lblPrice.Location = new Point(3, 148);
             lblPrice.Name = "lblPrice";
-            lblPrice.Size = new Size(158, 37);
+            lblPrice.Size = new Size(142, 37);
             lblPrice.TabIndex = 6;
             lblPrice.Text = "Price";
             lblPrice.TextAlign = ContentAlignment.MiddleCenter;
@@ -147,7 +147,7 @@
             lblActive.Dock = DockStyle.Fill;
             lblActive.Location = new Point(3, 185);
             lblActive.Name = "lblActive";
-            lblActive.Size = new Size(158, 40);
+            lblActive.Size = new Size(142, 40);
             lblActive.TabIndex = 7;
             lblActive.Text = "Active";
             lblActive.TextAlign = ContentAlignment.MiddleCenter;
@@ -156,9 +156,9 @@
             // 
             lstUserName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lstUserName.FormattingEnabled = true;
-            lstUserName.Location = new Point(167, 80);
+            lstUserName.Location = new Point(151, 77);
             lstUserName.Name = "lstUserName";
-            lstUserName.Size = new Size(151, 36);
+            lstUserName.Size = new Size(170, 36);
             lstUserName.TabIndex = 1;
             // 
             // lblCookbookName
@@ -168,23 +168,23 @@
             lblCookbookName.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblCookbookName.Location = new Point(3, 37);
             lblCookbookName.Name = "lblCookbookName";
-            lblCookbookName.Size = new Size(158, 37);
+            lblCookbookName.Size = new Size(142, 37);
             lblCookbookName.TabIndex = 4;
             lblCookbookName.Text = "Cookbook Name ";
             lblCookbookName.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // txtBookName
             // 
-            txtBookName.Location = new Point(167, 40);
+            txtBookName.Location = new Point(151, 40);
             txtBookName.Name = "txtBookName";
-            txtBookName.Size = new Size(125, 34);
+            txtBookName.Size = new Size(170, 34);
             txtBookName.TabIndex = 0;
             // 
             // lblDateCreated
             // 
             lblDateCreated.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             lblDateCreated.AutoSize = true;
-            lblDateCreated.Location = new Point(564, 111);
+            lblDateCreated.Location = new Point(556, 111);
             lblDateCreated.Name = "lblDateCreated";
             lblDateCreated.Size = new Size(130, 37);
             lblDateCreated.TabIndex = 2;
@@ -196,25 +196,25 @@
             pCookbookEdit.Controls.Add(txtDateCreated);
             pCookbookEdit.Controls.Add(txtPrice);
             pCookbookEdit.Dock = DockStyle.Fill;
-            pCookbookEdit.Location = new Point(167, 151);
+            pCookbookEdit.Location = new Point(151, 151);
             pCookbookEdit.Name = "pCookbookEdit";
-            pCookbookEdit.Size = new Size(924, 31);
+            pCookbookEdit.Size = new Size(940, 31);
             pCookbookEdit.TabIndex = 2;
             // 
             // txtDateCreated
             // 
             txtDateCreated.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            txtDateCreated.Location = new Point(402, -3);
+            txtDateCreated.Location = new Point(410, -3);
             txtDateCreated.Name = "txtDateCreated";
             txtDateCreated.ReadOnly = true;
-            txtDateCreated.Size = new Size(125, 34);
+            txtDateCreated.Size = new Size(152, 34);
             txtDateCreated.TabIndex = 0;
             // 
             // txtPrice
             // 
             txtPrice.Location = new Point(0, 0);
             txtPrice.Name = "txtPrice";
-            txtPrice.Size = new Size(125, 34);
+            txtPrice.Size = new Size(170, 34);
             txtPrice.TabIndex = 1;
             // 
             // cbxBookActive
@@ -223,7 +223,7 @@
             cbxBookActive.Checked = true;
             cbxBookActive.CheckState = CheckState.Checked;
             cbxBookActive.Dock = DockStyle.Left;
-            cbxBookActive.Location = new Point(167, 188);
+            cbxBookActive.Location = new Point(151, 188);
             cbxBookActive.Name = "cbxBookActive";
             cbxBookActive.Size = new Size(88, 34);
             cbxBookActive.TabIndex = 3;

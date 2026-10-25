@@ -9,7 +9,7 @@ go
  delete Directions 
  delete RecipeIngredient
  delete Recipe 
- delete Measurment
+ delete Measurement
  delete Ingredient
  delete Cuisine
  delete Users
@@ -87,7 +87,7 @@ join Users u
 on x.UserName = u.UserName
 
 go
-insert Measurment(measurmenttype)
+insert Measurement(Measurementtype)
 select 'cup'
 union select 'Tbsp'
 union select 'cloves'
@@ -101,7 +101,7 @@ union select 'pinch'
 
 ;
 with x as(
-select Recipename = 'Garlic Butter Pasta', Ingredientname = 'pasta', ingredientsequence = '1', measurmenttype = 'cup', amount = '2'
+select Recipename = 'Garlic Butter Pasta', Ingredientname = 'pasta', ingredientsequence = '1', Measurementtype = 'cup', amount = '2'
 union select 'Garlic Butter Pasta', 'butter', 2, 'tbsp', 3
 union select 'Garlic Butter Pasta', 'garlic', 3, 'cloves', 2
 union select 'Garlic Butter Pasta', 'black pepper', 4, 'tsp', 0.25
@@ -152,15 +152,15 @@ union select 'Strawberry Milkshake', 'sugar', 4, 'tsp', 2
 union select 'Strawberry Milkshake', 'honey', 5, 'tsp', 1
 union select 'Strawberry Milkshake', 'ice cubes', 6, 'unit', 5
 )
-insert Recipeingredient(RecipeId, IngredientId, IngredientSequence, Measurmentid, Amount)
-select r.RecipeId, i.IngredientId, x.ingredientsequence, m.MeasurmentId, x.amount
+insert Recipeingredient(RecipeId, IngredientId, IngredientSequence, Measurementid, Amount)
+select r.RecipeId, i.IngredientId, x.ingredientsequence, m.MeasurementId, x.amount
 from x 
 join Recipe r 
 on r.RecipeName = x.Recipename
 join Ingredient i 
 on i.ingredientname = x.IngredientName
-join Measurment m 
-on m.measurmenttype = x.measurmenttype 
+join Measurement m 
+on m.Measurementtype = x.Measurementtype 
 
 go 
 ;

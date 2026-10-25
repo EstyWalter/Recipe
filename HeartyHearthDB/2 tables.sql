@@ -8,7 +8,7 @@ drop table if exists Course
 drop table if exists Meal
 drop table if exists Directions 
 drop table if exists RecipeIngredient
-drop table if exists Measurment
+drop table if exists Measurement
 drop table if exists Recipe 
 drop table if exists Ingredient
 drop table if exists Cuisine
@@ -67,11 +67,11 @@ create table dbo.Recipe(
     PictureRecipe as concat('Recipe_', replace(RecipeName, ' ', '_' ), '.jpg')
 )
 go
-create table dbo.Measurment(
-    MeasurmentId int not null identity primary key, 
-    MeasurmentType varchar(50) not null
-    constraint Ck_Measurment_Type_not_blank check(MeasurmentType <> ''),
-    constraint U_Measurment_Measurment_Type unique(MeasurmentType)
+create table dbo.Measurement(
+    MeasurementId int not null identity primary key, 
+    MeasurementType varchar(50) not null
+    constraint Ck_Measurement_Type_not_blank check(MeasurementType <> ''),
+    constraint U_Measurement_Measurement_Type unique(MeasurementType)
 )
 go 
 create table dbo.RecipeIngredient(
@@ -80,7 +80,7 @@ create table dbo.RecipeIngredient(
     IngredientId int not null constraint F_Recipe_Ingredient_Ingredient foreign key references Ingredient(Ingredientid),
     IngredientSequence int not null
     constraint Ck_Ingredient_Ingredient_Sequence_not_neg check(IngredientSequence > 0),
-    MeasurmentId int not null constraint F_Recipe_Ingredient_Measurment foreign key references Measurment(MeasurmentId),
+    MeasurementId int not null constraint F_Recipe_Ingredient_Measurement foreign key references Measurement(MeasurementId),
     Amount decimal(4,2) not null
     constraint Ck_Ingredient_Amount_not_neg check(Amount > 0),
     constraint U_Ingredient_sequence_RecipeId unique(IngredientSequence, RecipeId)

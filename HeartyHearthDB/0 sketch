@@ -38,7 +38,7 @@ RecipeIngredient
     Ingredientid
     IngredientSequence int not null
     constraint not neg 
-    measurmenttype varchar(50) not null
+    Measurementtype varchar(50) not null
     not blank 
     amount decimal(4,2) not null
     not neg 

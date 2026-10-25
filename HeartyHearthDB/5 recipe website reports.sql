@@ -53,12 +53,12 @@ on d.RecipeId = r.RecipeId
 where r.RecipeName = 'Chocolate Chip Cookies'
 group by r.RecipeName, r.Calories
 
-select ListOfIngredients = concat(ri.Amount, ' ', m.measurmenttype, ' ',i.IngredientName), ri.IngredientSequence
+select ListOfIngredients = concat(ri.Amount, ' ', m.Measurementtype, ' ',i.IngredientName), ri.IngredientSequence
 from Recipe r 
 join RecipeIngredient ri 
 on r.RecipeId = ri.RecipeId 
-join Measurment m 
-on ri.MeasurmentId = m.MeasurmentId 
+join Measurement m 
+on ri.MeasurementId = m.MeasurementId 
 join Ingredient i 
 on i.IngredientId = ri.IngredientId
 where r.RecipeName = 'Chocolate Chip Cookies'

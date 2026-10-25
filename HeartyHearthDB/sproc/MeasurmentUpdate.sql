@@ -1,24 +1,24 @@
-create or alter proc dbo.MeasurmentUpdate 
-@MeasurmentId int output,
-@MeasurmentType	varchar	(50)
+create or alter proc dbo.MeasurementUpdate 
+@MeasurementId int output,
+@MeasurementType	varchar	(50)
 as 
 begin 
 declare @return int = 0
-select @MeasurmentId = isnull(@MeasurmentId, 0)
+select @MeasurementId = isnull(@MeasurementId, 0)
 
-if (@MeasurmentId = 0)
+if (@MeasurementId = 0)
     begin 
-        insert measurment (measurmenttype)
-        values (@MeasurmentType)
+        insert Measurement (Measurementtype)
+        values (@MeasurementType)
 
-        select @MeasurmentId = scope_identity()
+        select @MeasurementId = scope_identity()
     end 
 else 
    begin
-       update measurment
+       update Measurement
        set
-        MeasurmentType = @MeasurmentType
-       where measurmentId = @MeasurmentId
+        MeasurementType = @MeasurementType
+       where MeasurementId = @MeasurementId
    end 
 return @return 
 end 

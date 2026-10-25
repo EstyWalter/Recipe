@@ -47,7 +47,7 @@
             lstRecipeName.FormattingEnabled = true;
             lstRecipeName.Location = new Point(12, 38);
             lstRecipeName.Name = "lstRecipeName";
-            lstRecipeName.Size = new Size(722, 28);
+            lstRecipeName.Size = new Size(176, 28);
             lstRecipeName.TabIndex = 0;
             // 
             // frmCloneRecipe

@@ -15,22 +15,26 @@ namespace RecipeWinForms
 
         private void GetCookbookList()
         {
-            DataTable dtCookbook = Cookbook.GetCookbookList();
+            DataTable dtCookbook = Cookbook.GetCookbook("CookbookGet", "@List", 1);
             gCookbook.DataSource = dtCookbook;
             WindowsFormsUtility.FormatGridSearchResults(gCookbook, "Cookbook");
         }
 
         private void ShowCookbookDataForm(int RowIndex)
         {
-            int id = 0;
-            if (RowIndex > -1)
+            if(RowIndex != -1)
             {
-                id = (int)gCookbook.Rows[RowIndex].Cells["CookbookId"].Value;
+                int id = 0;
+                if (RowIndex > -2)
+                {
+                    id = (int)gCookbook.Rows[RowIndex].Cells["CookbookId"].Value;
+                }
+                if (this.MdiParent != null && this.MdiParent is frmMain)
+                {
+                    ((frmMain)this.MdiParent).OpenForm(typeof(frmCookbookData), id);
+                }
             }
-            if (this.MdiParent != null && this.MdiParent is frmMain)
-            {
-                ((frmMain)this.MdiParent).OpenForm(typeof(frmCookbookData), id);
-            }
+
         }
 
         private void GCookBook_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
@@ -40,7 +44,7 @@ namespace RecipeWinForms
 
         private void BtnNewCookbook_Click(object? sender, EventArgs e)
         {
-            ShowCookbookDataForm(-1);
+            ShowCookbookDataForm(-2);
         }
 
         private void GCookbook_KeyDown(object? sender, KeyEventArgs e)

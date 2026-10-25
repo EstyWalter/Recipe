@@ -18,6 +18,7 @@ namespace RecipeWinForms
             btnSaveRecipe.Click += BtnSaveRecipe_Click;
             btnDelete.Click += BtnDelete_Click;
             gRecipeEdit.CellContentClick += GRecipeEdit_CellContentClick;
+            gRecipeEdit.DataError += GRecipeEdit_DataError;
             this.Shown += FrmCookbookData_Shown;
             this.FormClosing += FrmCookbookData_FormClosing;
         }
@@ -52,7 +53,7 @@ namespace RecipeWinForms
         {
             dtcookbookrecipe = Cookbook.GetCookbook("CookbookRecipeGet", "@CookbookId", cookbookid);
             gRecipeEdit.DataSource = dtcookbookrecipe;
-            dtrecipe = Recipe.GetRecipe("@All", 1, 1);
+            dtrecipe = Recipe.GetRecipe("@All", 1);
             WindowsFormsUtility.AddComboBoxToGrid(gRecipeEdit, dtrecipe, "Recipe", "RecipeName");
             WindowsFormsUtility.FormatGridForEdit(gRecipeEdit, "CookbookRecipe");
             WindowsFormsUtility.AddDeleteButtonToGrid(gRecipeEdit, "Delete");
@@ -79,44 +80,6 @@ namespace RecipeWinForms
             }
             return b;
         }
-
-        //  private bool SaveRecipe()
-        //{/
-        //    bool b = false;
-        //   string value = GetCellValue();
-        // if (value != "")
-        // {
-        //     try
-        //    {
-        /// //Application.UseWaitCursor = true;
-        /// if(gRecipeEdit.CurrentCell.RowIndex != null)
-        ///{
-        ///    int currentRowIndex = gRecipeEdit.CurrentCell.RowIndex;
-        ///    int nextRowIndex = currentRowIndex + 1;
-        ///    if (nextRowIndex >= gRecipeEdit.Rows.Count)
-        ///    {
-        ///        nextRowIndex = currentRowIndex;
-        ///    }
-        ///    int currentColIndex = gRecipeEdit.CurrentCell.ColumnIndex;
-        ///    gRecipeEdit.CurrentCell = gRecipeEdit.Rows[nextRowIndex].Cells[currentColIndex];
-        ///}
-        ///    
-        ///    cookbookid = Cookbook.FindCookbookId(dtcookbook);
-        ///    Cookbook.SaveRecipe(dtcookbookrecipe, cookbookid);
-        ///    b = true;
-        ///}
-        ///catch (Exception ex)
-        ///{
-        ///    MessageBox.Show(ex.Message, "Cookbook");
-        ///}
-        ///finally
-        ///{
-        ///    Application.UseWaitCursor = false;
-        // ///  }
-        //  }
-        //return b;
-
-
 
         private bool SaveRecipe()
         {
@@ -206,29 +169,32 @@ namespace RecipeWinForms
 
         private void DeleteRecipeFromCookbook(int row)
         {
-
-            int id = WindowsFormsUtility.GetIdFromGrid(gRecipeEdit, row, "CookbookRecipeId");
-            if (id > 0)
+            if(row >= 0)
             {
-                try
+                int id = WindowsFormsUtility.GetIdFromGrid(gRecipeEdit, row, "CookbookRecipeId");
+                if (id > 0)
                 {
-                    Cookbook.Delete("CookbookRecipeDelete", "@CookbookRecipeId", id);
-                    gRecipeEdit.Rows.RemoveAt(row);
+                    try
+                    {
+                        Cookbook.Delete("CookbookRecipeDelete", "@CookbookRecipeId", id);
+                        gRecipeEdit.Rows.RemoveAt(row);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, Application.ProductName);
+                    }
                 }
-                catch (Exception ex)
+                else if (id < gRecipeEdit.Rows.Count)
                 {
-                    MessageBox.Show(ex.Message, Application.ProductName);
+                    string value = GetCellValue(row);
+                    if (value != "")
+                    {
+                        gRecipeEdit.Rows.RemoveAt(row);
+                    }
+
                 }
             }
-            else if (id < gRecipeEdit.Rows.Count)
-            {
-                string value = GetCellValue(row);
-                if (value != "")
-                {
-                    gRecipeEdit.Rows.RemoveAt(row);
-                }
 
-            }
 
         }
 
@@ -294,6 +260,9 @@ namespace RecipeWinForms
             }
         }
 
-
+        private void GRecipeEdit_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            WindowsFormsUtility.DataError();
+        }
     }
 }

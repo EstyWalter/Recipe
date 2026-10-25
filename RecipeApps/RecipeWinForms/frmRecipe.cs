@@ -16,7 +16,7 @@ namespace RecipeWinForms
 
         private void ListRecipes()
         {
-            DataTable dt = Recipe.ListRecipes();
+            DataTable dt = Recipe.GetRecipe("@List", 1);
             gRecipe.DataSource = dt;
             gRecipe.Columns["RecipeId"].Visible = false;
         }
@@ -36,7 +36,10 @@ namespace RecipeWinForms
 
         private void GRecipe_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
-            ShowRecipeForm(e.RowIndex);
+            if(e.RowIndex >= 0)
+            {
+                ShowRecipeForm(e.RowIndex);
+            }
         }
 
         private void BtnNew_Click(object? sender, EventArgs e)

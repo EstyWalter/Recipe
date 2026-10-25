@@ -1,18 +1,18 @@
-create or alter proc dbo.MeasurmentDelete
-@MeasurmentId int,
+create or alter proc dbo.MeasurementDelete
+@MeasurementId int,
 @Message varchar(500) = '' output  
 as 
 begin
 declare @return int = 0
-select @MeasurmentId = isnull(@MeasurmentId, 0)
+select @MeasurementId = isnull(@MeasurementId, 0)
     begin try 
         begin tran 
-          delete RecipeIngredient where MeasurmentId = @MeasurmentId
-          delete Measurment where MeasurmentId = @MeasurmentId
+          delete RecipeIngredient where MeasurementId = @MeasurementId
+          delete Measurement where MeasurementId = @MeasurementId
         commit;
     end try 
     begin catch
-        select @return = 1, @Message = 'Could not delete Measurment'
+        select @return = 1, @Message = 'Could not delete Measurement'
 		rollback;
 		throw
 	end catch 

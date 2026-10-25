@@ -9,7 +9,7 @@ namespace RecipeWinForms
         DataTable dtRecipe = new();
         DataTable dtrecipeingredient = new();
         DataTable dtingredient = new();
-        DataTable dtmeasurment = new();
+        DataTable dtMeasurement = new();
         DataTable dtdirections = new();
         BindingSource bindsource = new BindingSource();
         int recipeid = 0;
@@ -25,6 +25,8 @@ namespace RecipeWinForms
             gIngredients.CellContentClick += GIngredients_CellContentClick;
             gSteps.CellContentClick += GSteps_CellContentClick;
             btnChangeStatus.Click += BtnChangeStatus_Click;
+            gSteps.DataError += DataError;
+            gIngredients.DataError += DataError;
             this.FormClosing += FrmRecipeData_FormClosing;
         }
 
@@ -62,11 +64,11 @@ namespace RecipeWinForms
         public void BindGingredients(int id)
         {
             dtrecipeingredient = RecipeIngredientDirections.GetDataTableWithId("RecipeIngredientGet", id);
-            dtmeasurment = RecipeIngredientDirections.GetDataTable("MeasurmentGet");
+            dtMeasurement = RecipeIngredientDirections.GetDataTable("MeasurementGet");
             dtingredient = RecipeIngredientDirections.GetDataTable("IngredientGet");
             gIngredients.DataSource = dtrecipeingredient;
             WindowsFormsUtility.AddComboBoxToGrid(gIngredients, dtingredient, "Ingredient", "Ingredientname");
-            WindowsFormsUtility.AddComboBoxToGrid(gIngredients, dtmeasurment, "measurment", "MeasurmentType");
+            WindowsFormsUtility.AddComboBoxToGrid(gIngredients, dtMeasurement, "Measurement", "MeasurementType");
             WindowsFormsUtility.FormatGridForEdit(gIngredients, "Ingredients");
             WindowsFormsUtility.AddDeleteButtonToGrid(gIngredients, "Delete");
         }
@@ -146,54 +148,58 @@ namespace RecipeWinForms
 
         private void DeleteDirections(int rowindex)
         {
-
-            int id = WindowsFormsUtility.GetIdFromGrid(gSteps, rowindex, "DirectionsId");
-            if (id > 0)
+            if (rowindex >= 0)
             {
-                try
+                int id = WindowsFormsUtility.GetIdFromGrid(gSteps, rowindex, "DirectionsId");
+                if (id > 0)
                 {
-                    RecipeIngredientDirections.DeleteFromTable("DirectionsDelete", "@DirectionsId", id);
-                    gSteps.Rows.RemoveAt(rowindex);
+                    try
+                    {
+                        RecipeIngredientDirections.DeleteFromTable("DirectionsDelete", "@DirectionsId", id);
+                        gSteps.Rows.RemoveAt(rowindex);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, Application.ProductName);
+                    }
                 }
-                catch (Exception ex)
+                else if (id < gSteps.Rows.Count)
                 {
-                    MessageBox.Show(ex.Message, Application.ProductName);
-                }
-            }
-            else if (id < gSteps.Rows.Count)
-            {
-                string s = GetCellValue(gSteps, rowindex);
-                if (s != "")
-                {
-                    gSteps.Rows.RemoveAt(rowindex);
+                    string s = GetCellValue(gSteps, rowindex);
+                    if (s != "")
+                    {
+                        gSteps.Rows.RemoveAt(rowindex);
+                    }
                 }
             }
         }
 
         private void DeleteRecipeIngredient(int rowindex)
         {
-            int id = WindowsFormsUtility.GetIdFromGrid(gIngredients, rowindex, "RecipeIngredientId");
-            if (id > 0)
+            if (rowindex >= 0)
             {
-                try
+                int id = WindowsFormsUtility.GetIdFromGrid(gIngredients, rowindex, "RecipeIngredientId");
+                if (id > 0)
                 {
-                    RecipeIngredientDirections.DeleteFromTable("RecipeIngredientDelete", "@RecipeIngredientId", id);
-                    gIngredients.Rows.RemoveAt(rowindex);
+                    try
+                    {
+                        RecipeIngredientDirections.DeleteFromTable("RecipeIngredientDelete", "@RecipeIngredientId", id);
+                        gIngredients.Rows.RemoveAt(rowindex);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, Application.ProductName);
+                    }
                 }
-                catch (Exception ex)
+                else if (id < gIngredients.Rows.Count)
                 {
-                    MessageBox.Show(ex.Message, Application.ProductName);
+                    string s = GetCellValue(gIngredients, rowindex);
+                    if (s != "")
+                    {
+                        gIngredients.Rows.RemoveAt(rowindex);
+                    }
                 }
             }
-            else if (id < gIngredients.Rows.Count)
-            {
-                string s = GetCellValue(gIngredients, rowindex);
-                if (s != "")
-                {
-                    gIngredients.Rows.RemoveAt(rowindex);
-                }
-            }
-
         }
 
         private bool IngredientSave()
@@ -317,6 +323,11 @@ namespace RecipeWinForms
                         break;
                 }
             }
+        }
+
+        private void DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            WindowsFormsUtility.DataError();
         }
     }
 }

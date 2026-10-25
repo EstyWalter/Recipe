@@ -32,7 +32,7 @@
             gData = new DataGridView();
             pOptionButtons = new Panel();
             optCourse = new RadioButton();
-            optMeasurments = new RadioButton();
+            optMeasurements = new RadioButton();
             optIngredient = new RadioButton();
             optCuisine = new RadioButton();
             optUsers = new RadioButton();
@@ -74,7 +74,7 @@
             // pOptionButtons
             // 
             pOptionButtons.Controls.Add(optCourse);
-            pOptionButtons.Controls.Add(optMeasurments);
+            pOptionButtons.Controls.Add(optMeasurements);
             pOptionButtons.Controls.Add(optIngredient);
             pOptionButtons.Controls.Add(optCuisine);
             pOptionButtons.Controls.Add(optUsers);
@@ -95,15 +95,15 @@
             optCourse.Text = "Course";
             optCourse.UseVisualStyleBackColor = true;
             // 
-            // optMeasurments
+            // optMeasurements
             // 
-            optMeasurments.AutoSize = true;
-            optMeasurments.Location = new Point(24, 248);
-            optMeasurments.Name = "optMeasurments";
-            optMeasurments.Size = new Size(112, 24);
-            optMeasurments.TabIndex = 3;
-            optMeasurments.Text = "Measurment";
-            optMeasurments.UseVisualStyleBackColor = true;
+            optMeasurements.AutoSize = true;
+            optMeasurements.Location = new Point(24, 248);
+            optMeasurements.Name = "optMeasurements";
+            optMeasurements.Size = new Size(112, 24);
+            optMeasurements.TabIndex = 3;
+            optMeasurements.Text = "Measurement.";
+            optMeasurements.UseVisualStyleBackColor = true;
             // 
             // optIngredient
             // 
@@ -168,7 +168,7 @@
         private Panel pOptionButtons;
         private Button btnSave;
         private RadioButton optCourse;
-        private RadioButton optMeasurments;
+        private RadioButton optMeasurements;
         private RadioButton optIngredient;
         private RadioButton optCuisine;
         private RadioButton optUsers;

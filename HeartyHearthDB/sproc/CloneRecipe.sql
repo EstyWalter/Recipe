@@ -25,14 +25,14 @@ begin
             on r.RecipeId = d.RecipeId
             where @RecipeId = r.RecipeId
 
-            insert RecipeIngredient(RecipeId, IngredientId, IngredientSequence, MeasurmentId, Amount)
+            insert RecipeIngredient(RecipeId, IngredientId, IngredientSequence, MeasurementId, Amount)
             select (select r.RecipeId from Recipe r where r.recipename = @RecipeNameClone),  
-            ri.IngredientId, ri.IngredientSequence, m.MeasurmentId, ri.Amount
+            ri.IngredientId, ri.IngredientSequence, m.MeasurementId, ri.Amount
             from Recipe r
             join recipeIngredient ri 
             on r.RecipeId = ri.RecipeId 
-            join Measurment m 
-            on m.MeasurmentId = ri.MeasurmentId 
+            join Measurement m 
+            on m.MeasurementId = ri.MeasurementId 
             where @RecipeId = r.RecipeId
 
         commit tran;

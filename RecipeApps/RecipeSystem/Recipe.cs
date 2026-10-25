@@ -6,11 +6,6 @@ namespace RecipeSystem
 
     public class Recipe
     {
-        public static DataTable ListRecipes()
-        {
-            SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeList");
-            return SQLUtility.GetDataTable(cmd);
-        }
 
         public static DataTable GetRecipe(string parametername, int paramvalue, int paramvalue2 = 0)
         {

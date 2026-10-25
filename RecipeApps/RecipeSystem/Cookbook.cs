@@ -5,10 +5,6 @@ namespace RecipeSystem
 {
     public class Cookbook
     {
-        public static DataTable GetCookbookList()
-        {
-            return SQLUtility.GetDataTable(SQLUtility.GetSqlCommand("CookbookList"));
-        }
 
         public static DataTable GetCookbook(string sprocname, string paramname, int value)
         {

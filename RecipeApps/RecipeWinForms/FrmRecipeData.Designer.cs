@@ -44,9 +44,10 @@
             lblStatuses = new Label();
             tbMain = new TabControl();
             tbIngredients = new TabPage();
+            tblIngredients = new TableLayoutPanel();
             gIngredients = new DataGridView();
-            pIngredients = new Panel();
             btnIngredientsSave = new Button();
+            pIngredients = new Panel();
             tbSteps = new TabPage();
             tblSteps = new TableLayoutPanel();
             pSteps = new Panel();
@@ -66,8 +67,8 @@
             tblButtons.SuspendLayout();
             tbMain.SuspendLayout();
             tbIngredients.SuspendLayout();
+            tblIngredients.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gIngredients).BeginInit();
-            pIngredients.SuspendLayout();
             tbSteps.SuspendLayout();
             tblSteps.SuspendLayout();
             pSteps.SuspendLayout();
@@ -76,6 +77,7 @@
             // 
             // tblMain
             // 
+            tblMain.AutoSize = true;
             tblMain.BackColor = Color.GhostWhite;
             tblMain.ColumnCount = 2;
             tblMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48.07547F));
@@ -109,7 +111,7 @@
             tblMain.RowStyles.Add(new RowStyle(SizeType.Percent, 11.387435F));
             tblMain.RowStyles.Add(new RowStyle(SizeType.Percent, 48.3128853F));
             tblMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 127F));
-            tblMain.Size = new Size(1203, 896);
+            tblMain.Size = new Size(1259, 896);
             tblMain.TabIndex = 0;
             // 
             // lblUser
@@ -117,7 +119,7 @@
             lblUser.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             lblUser.AutoSize = true;
             lblUser.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblUser.Location = new Point(263, 120);
+            lblUser.Location = new Point(277, 120);
             lblUser.Name = "lblUser";
             lblUser.Size = new Size(51, 50);
             lblUser.TabIndex = 1;
@@ -130,9 +132,9 @@
             lstUserName.BackColor = Color.Snow;
             lstUserName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lstUserName.FormattingEnabled = true;
-            lstUserName.Location = new Point(581, 123);
+            lstUserName.Location = new Point(608, 123);
             lstUserName.Name = "lstUserName";
-            lstUserName.Size = new Size(190, 36);
+            lstUserName.Size = new Size(203, 36);
             lstUserName.TabIndex = 1;
             // 
             // tblDates
@@ -148,12 +150,12 @@
             tblDates.Controls.Add(txtDateArchived, 2, 1);
             tblDates.Controls.Add(txtDateDrafted, 0, 1);
             tblDates.Dock = DockStyle.Fill;
-            tblDates.Location = new Point(581, 358);
+            tblDates.Location = new Point(608, 358);
             tblDates.Name = "tblDates";
             tblDates.RowCount = 2;
             tblDates.RowStyles.Add(new RowStyle());
             tblDates.RowStyles.Add(new RowStyle());
-            tblDates.Size = new Size(619, 96);
+            tblDates.Size = new Size(648, 96);
             tblDates.TabIndex = 5;
             // 
             // lblDrafted
@@ -163,7 +165,7 @@
             lblDrafted.Font = new Font("Segoe UI", 9F);
             lblDrafted.Location = new Point(3, 0);
             lblDrafted.Name = "lblDrafted";
-            lblDrafted.Size = new Size(200, 20);
+            lblDrafted.Size = new Size(209, 20);
             lblDrafted.TabIndex = 1;
             lblDrafted.Text = "Drafted";
             // 
@@ -172,9 +174,9 @@
             lblArchived.AutoSize = true;
             lblArchived.Dock = DockStyle.Fill;
             lblArchived.Font = new Font("Segoe UI", 9F);
-            lblArchived.Location = new Point(415, 0);
+            lblArchived.Location = new Point(434, 0);
             lblArchived.Name = "lblArchived";
-            lblArchived.Size = new Size(201, 20);
+            lblArchived.Size = new Size(211, 20);
             lblArchived.TabIndex = 3;
             lblArchived.Text = "Archived";
             // 
@@ -183,26 +185,26 @@
             lblPublished.AutoSize = true;
             lblPublished.Dock = DockStyle.Fill;
             lblPublished.Font = new Font("Segoe UI", 9F);
-            lblPublished.Location = new Point(209, 0);
+            lblPublished.Location = new Point(218, 0);
             lblPublished.Name = "lblPublished";
-            lblPublished.Size = new Size(200, 20);
+            lblPublished.Size = new Size(210, 20);
             lblPublished.TabIndex = 2;
             lblPublished.Text = "Published";
             // 
             // txtDatePublished
             // 
-            txtDatePublished.Location = new Point(209, 23);
+            txtDatePublished.Location = new Point(218, 23);
             txtDatePublished.Name = "txtDatePublished";
             txtDatePublished.ReadOnly = true;
-            txtDatePublished.Size = new Size(125, 30);
+            txtDatePublished.Size = new Size(200, 30);
             txtDatePublished.TabIndex = 1;
             // 
             // txtDateArchived
             // 
-            txtDateArchived.Location = new Point(415, 23);
+            txtDateArchived.Location = new Point(434, 23);
             txtDateArchived.Name = "txtDateArchived";
             txtDateArchived.ReadOnly = true;
-            txtDateArchived.Size = new Size(125, 30);
+            txtDateArchived.Size = new Size(200, 30);
             txtDateArchived.TabIndex = 2;
             // 
             // txtDateDrafted
@@ -210,7 +212,7 @@
             txtDateDrafted.Location = new Point(3, 23);
             txtDateDrafted.Name = "txtDateDrafted";
             txtDateDrafted.ReadOnly = true;
-            txtDateDrafted.Size = new Size(125, 30);
+            txtDateDrafted.Size = new Size(200, 30);
             txtDateDrafted.TabIndex = 0;
             // 
             // tblButtons
@@ -225,7 +227,7 @@
             tblButtons.Name = "tblButtons";
             tblButtons.RowCount = 1;
             tblButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 61.53846F));
-            tblButtons.Size = new Size(572, 64);
+            tblButtons.Size = new Size(599, 64);
             tblButtons.TabIndex = 8;
             // 
             // btnDelete
@@ -233,9 +235,9 @@
             btnDelete.AutoSize = true;
             btnDelete.BackColor = Color.Red;
             btnDelete.Dock = DockStyle.Fill;
-            btnDelete.Location = new Point(289, 3);
+            btnDelete.Location = new Point(302, 3);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(280, 58);
+            btnDelete.Size = new Size(294, 58);
             btnDelete.TabIndex = 1;
             btnDelete.Text = "DELETE";
             btnDelete.UseVisualStyleBackColor = false;
@@ -249,7 +251,7 @@
             btnSave.ForeColor = Color.LightCyan;
             btnSave.Location = new Point(3, 3);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(280, 58);
+            btnSave.Size = new Size(293, 58);
             btnSave.TabIndex = 0;
             btnSave.Text = "SAVE";
             btnSave.UseVisualStyleBackColor = false;
@@ -259,7 +261,7 @@
             lblStatuses.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             lblStatuses.AutoSize = true;
             lblStatuses.Font = new Font("Segoe UI", 12F);
-            lblStatuses.Location = new Point(220, 355);
+            lblStatuses.Location = new Point(234, 355);
             lblStatuses.Name = "lblStatuses";
             lblStatuses.Size = new Size(137, 102);
             lblStatuses.TabIndex = 5;
@@ -275,53 +277,71 @@
             tbMain.Location = new Point(3, 460);
             tbMain.Name = "tbMain";
             tbMain.SelectedIndex = 0;
-            tbMain.Size = new Size(1197, 433);
+            tbMain.Size = new Size(1253, 433);
             tbMain.TabIndex = 6;
             // 
             // tbIngredients
             // 
-            tbIngredients.Controls.Add(gIngredients);
+            tbIngredients.BackColor = Color.Transparent;
+            tbIngredients.Controls.Add(tblIngredients);
             tbIngredients.Controls.Add(pIngredients);
+            tbIngredients.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbIngredients.Location = new Point(4, 32);
             tbIngredients.Name = "tbIngredients";
             tbIngredients.Padding = new Padding(3);
-            tbIngredients.Size = new Size(1189, 397);
+            tbIngredients.Size = new Size(1245, 397);
             tbIngredients.TabIndex = 0;
             tbIngredients.Text = "Ingredients";
-            tbIngredients.UseVisualStyleBackColor = true;
+            // 
+            // tblIngredients
+            // 
+            tblIngredients.ColumnCount = 1;
+            tblIngredients.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 7.425343F));
+            tblIngredients.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 92.57465F));
+            tblIngredients.Controls.Add(gIngredients, 1, 1);
+            tblIngredients.Controls.Add(btnIngredientsSave, 0, 0);
+            tblIngredients.Dock = DockStyle.Fill;
+            tblIngredients.Location = new Point(3, 3);
+            tblIngredients.Name = "tblIngredients";
+            tblIngredients.RowCount = 2;
+            tblIngredients.RowStyles.Add(new RowStyle(SizeType.Percent, 19.43734F));
+            tblIngredients.RowStyles.Add(new RowStyle(SizeType.Percent, 80.56266F));
+            tblIngredients.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tblIngredients.Size = new Size(1239, 391);
+            tblIngredients.TabIndex = 3;
             // 
             // gIngredients
             // 
             gIngredients.BackgroundColor = Color.GhostWhite;
             gIngredients.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gIngredients.Dock = DockStyle.Fill;
-            gIngredients.Location = new Point(3, 114);
+            gIngredients.Location = new Point(3, 79);
             gIngredients.Name = "gIngredients";
             gIngredients.RowHeadersWidth = 51;
-            gIngredients.Size = new Size(1183, 280);
+            gIngredients.Size = new Size(1233, 309);
             gIngredients.TabIndex = 0;
-            // 
-            // pIngredients
-            // 
-            pIngredients.BackColor = Color.GhostWhite;
-            pIngredients.Controls.Add(btnIngredientsSave);
-            pIngredients.Dock = DockStyle.Top;
-            pIngredients.Location = new Point(3, 3);
-            pIngredients.Name = "pIngredients";
-            pIngredients.Size = new Size(1183, 111);
-            pIngredients.TabIndex = 2;
             // 
             // btnIngredientsSave
             // 
-            btnIngredientsSave.AutoSize = true;
+            btnIngredientsSave.BackColor = Color.GhostWhite;
             btnIngredientsSave.CausesValidation = false;
             btnIngredientsSave.Dock = DockStyle.Left;
-            btnIngredientsSave.Location = new Point(0, 0);
+            btnIngredientsSave.Location = new Point(3, 3);
             btnIngredientsSave.Name = "btnIngredientsSave";
-            btnIngredientsSave.Size = new Size(125, 111);
+            btnIngredientsSave.Size = new Size(87, 70);
             btnIngredientsSave.TabIndex = 0;
             btnIngredientsSave.Text = "Save";
-            btnIngredientsSave.UseVisualStyleBackColor = true;
+            btnIngredientsSave.UseVisualStyleBackColor = false;
+            // 
+            // pIngredients
+            // 
+            pIngredients.AutoSize = true;
+            pIngredients.BackColor = Color.GhostWhite;
+            pIngredients.Dock = DockStyle.Top;
+            pIngredients.Location = new Point(3, 3);
+            pIngredients.Name = "pIngredients";
+            pIngredients.Size = new Size(1239, 0);
+            pIngredients.TabIndex = 2;
             // 
             // tbSteps
             // 
@@ -329,7 +349,7 @@
             tbSteps.Location = new Point(4, 29);
             tbSteps.Name = "tbSteps";
             tbSteps.Padding = new Padding(3);
-            tbSteps.Size = new Size(1189, 400);
+            tbSteps.Size = new Size(1245, 400);
             tbSteps.TabIndex = 1;
             tbSteps.Text = "Steps";
             tbSteps.UseVisualStyleBackColor = true;
@@ -348,7 +368,7 @@
             tblSteps.RowCount = 2;
             tblSteps.RowStyles.Add(new RowStyle(SizeType.Percent, 19.69309F));
             tblSteps.RowStyles.Add(new RowStyle(SizeType.Percent, 80.30691F));
-            tblSteps.Size = new Size(1183, 394);
+            tblSteps.Size = new Size(1239, 394);
             tblSteps.TabIndex = 0;
             // 
             // pSteps
@@ -358,15 +378,16 @@
             pSteps.Dock = DockStyle.Fill;
             pSteps.Location = new Point(3, 3);
             pSteps.Name = "pSteps";
-            pSteps.Size = new Size(1177, 71);
+            pSteps.Size = new Size(1233, 71);
             pSteps.TabIndex = 1;
             // 
             // btnStepsSave
             // 
+            btnStepsSave.AutoSize = true;
             btnStepsSave.Dock = DockStyle.Left;
             btnStepsSave.Location = new Point(0, 0);
             btnStepsSave.Name = "btnStepsSave";
-            btnStepsSave.Size = new Size(123, 71);
+            btnStepsSave.Size = new Size(84, 71);
             btnStepsSave.TabIndex = 2;
             btnStepsSave.Text = "Save";
             btnStepsSave.UseVisualStyleBackColor = true;
@@ -379,7 +400,7 @@
             gSteps.Location = new Point(3, 80);
             gSteps.Name = "gSteps";
             gSteps.RowHeadersWidth = 51;
-            gSteps.Size = new Size(1177, 311);
+            gSteps.Size = new Size(1233, 311);
             gSteps.TabIndex = 0;
             // 
             // lblCuisine
@@ -387,7 +408,7 @@
             lblCuisine.Anchor = AnchorStyles.Top;
             lblCuisine.AutoSize = true;
             lblCuisine.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblCuisine.Location = new Point(252, 170);
+            lblCuisine.Location = new Point(265, 170);
             lblCuisine.Name = "lblCuisine";
             lblCuisine.Size = new Size(74, 28);
             lblCuisine.TabIndex = 2;
@@ -399,7 +420,7 @@
             lblRecipeName.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             lblRecipeName.AutoSize = true;
             lblRecipeName.Font = new Font("Segoe UI", 12F);
-            lblRecipeName.Location = new Point(226, 70);
+            lblRecipeName.Location = new Point(239, 70);
             lblRecipeName.Name = "lblRecipeName";
             lblRecipeName.Size = new Size(126, 50);
             lblRecipeName.TabIndex = 0;
@@ -412,19 +433,19 @@
             lstCuisineType.BackColor = Color.Snow;
             lstCuisineType.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lstCuisineType.FormattingEnabled = true;
-            lstCuisineType.Location = new Point(581, 173);
+            lstCuisineType.Location = new Point(608, 173);
             lstCuisineType.Name = "lstCuisineType";
-            lstCuisineType.Size = new Size(190, 36);
+            lstCuisineType.Size = new Size(203, 36);
             lstCuisineType.TabIndex = 2;
             // 
             // txtRecipeName
             // 
             txtRecipeName.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             txtRecipeName.BackColor = Color.Snow;
-            txtRecipeName.Location = new Point(581, 73);
+            txtRecipeName.Location = new Point(608, 73);
             txtRecipeName.Name = "txtRecipeName";
             txtRecipeName.ScrollBars = ScrollBars.Both;
-            txtRecipeName.Size = new Size(212, 30);
+            txtRecipeName.Size = new Size(203, 30);
             txtRecipeName.TabIndex = 0;
             // 
             // lblCurrentStatus
@@ -432,7 +453,7 @@
             lblCurrentStatus.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             lblCurrentStatus.AutoSize = true;
             lblCurrentStatus.Font = new Font("Segoe UI", 12F);
-            lblCurrentStatus.Location = new Point(221, 320);
+            lblCurrentStatus.Location = new Point(235, 320);
             lblCurrentStatus.Name = "lblCurrentStatus";
             lblCurrentStatus.Size = new Size(135, 35);
             lblCurrentStatus.TabIndex = 4;
@@ -444,7 +465,7 @@
             lblCalories.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             lblCalories.AutoSize = true;
             lblCalories.Font = new Font("Segoe UI", 12F);
-            lblCalories.Location = new Point(248, 220);
+            lblCalories.Location = new Point(262, 220);
             lblCalories.Name = "lblCalories";
             lblCalories.Size = new Size(81, 50);
             lblCalories.TabIndex = 3;
@@ -454,26 +475,26 @@
             // txtStatuses
             // 
             txtStatuses.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            txtStatuses.Location = new Point(581, 323);
+            txtStatuses.Location = new Point(608, 323);
             txtStatuses.Name = "txtStatuses";
             txtStatuses.ReadOnly = true;
-            txtStatuses.Size = new Size(212, 30);
+            txtStatuses.Size = new Size(203, 30);
             txtStatuses.TabIndex = 4;
             // 
             // txtCalories
             // 
             txtCalories.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             txtCalories.BackColor = Color.Snow;
-            txtCalories.Location = new Point(581, 223);
+            txtCalories.Location = new Point(608, 223);
             txtCalories.Name = "txtCalories";
-            txtCalories.Size = new Size(212, 30);
+            txtCalories.Size = new Size(203, 30);
             txtCalories.TabIndex = 3;
             // 
             // btnChangeStatus
             // 
             btnChangeStatus.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             btnChangeStatus.BackColor = Color.GhostWhite;
-            btnChangeStatus.Location = new Point(823, 3);
+            btnChangeStatus.Location = new Point(865, 3);
             btnChangeStatus.Name = "btnChangeStatus";
             btnChangeStatus.Size = new Size(134, 64);
             btnChangeStatus.TabIndex = 9;
@@ -484,7 +505,7 @@
             // 
             AutoScaleDimensions = new SizeF(9F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1203, 896);
+            ClientSize = new Size(1259, 896);
             Controls.Add(tblMain);
             Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Name = "frmRecipeData";
@@ -497,14 +518,16 @@
             tblButtons.PerformLayout();
             tbMain.ResumeLayout(false);
             tbIngredients.ResumeLayout(false);
+            tbIngredients.PerformLayout();
+            tblIngredients.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gIngredients).EndInit();
-            pIngredients.ResumeLayout(false);
-            pIngredients.PerformLayout();
             tbSteps.ResumeLayout(false);
             tblSteps.ResumeLayout(false);
             pSteps.ResumeLayout(false);
+            pSteps.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)gSteps).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -529,9 +552,7 @@
         private TextBox txtCalories;
         private Button btnChangeStatus;
         private TabControl tbMain;
-        private TabPage tbIngredients;
         private DataGridView gIngredients;
-        private Panel pIngredients;
         private Button btnIngredientsSave;
         private Label lblStatuses;
         private Label lblCurrentStatus;
@@ -545,5 +566,8 @@
         private Button btnStepsSave;
         private DataGridView gSteps;
         private TableLayoutPanel tblSteps;
+        private TabPage tbIngredients;
+        private TableLayoutPanel tblIngredients;
+        private Panel pIngredients;
     }
 }

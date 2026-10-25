@@ -53,7 +53,7 @@
             tblMain.RowCount = 2;
             tblMain.RowStyles.Add(new RowStyle(SizeType.Percent, 10.8974361F));
             tblMain.RowStyles.Add(new RowStyle(SizeType.Percent, 89.10256F));
-            tblMain.Size = new Size(1237, 780);
+            tblMain.Size = new Size(1260, 649);
             tblMain.TabIndex = 0;
             // 
             // btnNew
@@ -63,7 +63,7 @@
             btnNew.Dock = DockStyle.Fill;
             btnNew.Location = new Point(3, 3);
             btnNew.Name = "btnNew";
-            btnNew.Size = new Size(303, 79);
+            btnNew.Size = new Size(309, 64);
             btnNew.TabIndex = 0;
             btnNew.Text = "New Recipe";
             btnNew.UseVisualStyleBackColor = false;
@@ -76,17 +76,17 @@
             tblMain.SetColumnSpan(gRecipe, 4);
             gRecipe.Dock = DockStyle.Fill;
             gRecipe.GridColor = SystemColors.Info;
-            gRecipe.Location = new Point(3, 88);
+            gRecipe.Location = new Point(3, 73);
             gRecipe.Name = "gRecipe";
             gRecipe.RowHeadersWidth = 51;
-            gRecipe.Size = new Size(1231, 689);
+            gRecipe.Size = new Size(1254, 573);
             gRecipe.TabIndex = 1;
             // 
             // frmRecipe
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1237, 780);
+            ClientSize = new Size(1260, 649);
             Controls.Add(tblMain);
             Name = "frmRecipe";
             Text = "Recipe";

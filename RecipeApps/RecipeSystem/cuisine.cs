@@ -10,7 +10,7 @@ namespace RecipeSystem
         {
             SqlCommand cmd = SQLUtility.GetSqlCommand("CuisineGet");
             cmd.Parameters["@All"].Value = 1;
-            cmd.Parameters["@IncludeBlank"].Value = 1;
+            cmd.Parameters["@IncludeBlank"].Value = 0;
             return SQLUtility.GetDataTable(cmd);
         }
     }
