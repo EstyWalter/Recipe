@@ -13,7 +13,7 @@ as
 begin 
 declare @return int = 0
 
-select @CuisineId = nullif(@CuisineId, 0), @UsersId = nullif(@UsersId, 0), @RecipeId = isnull(@RecipeId, 0);
+select @CuisineId = nullif(@CuisineId, 0), @UsersId = nullif(@UsersId, 0), @RecipeId = isnull(@RecipeId, 0)
 
 if @RecipeId = 0
 begin

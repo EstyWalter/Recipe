@@ -14,7 +14,7 @@ if (@UsersId = 0)
         insert Users (FirstName, LastName, UserName)
         values (@FirstName, @LastName, @UserName)
 
-        select UsersId = scope_identity()
+        select @UsersId = scope_identity()
     end 
 else 
    begin

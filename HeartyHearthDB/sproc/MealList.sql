@@ -15,4 +15,4 @@ as
         order by m.MealName 
     end 
 go 
-exec MealList
+--exec MealList
