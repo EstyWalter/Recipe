@@ -1,4 +1,6 @@
 ﻿using CPUFramework;
+using Microsoft.IdentityModel.Protocols;
+using NLog.Internal;
 using NUnit.Framework.Legacy;
 using System.Data;
 using System.Runtime.CompilerServices;
@@ -7,16 +9,38 @@ namespace RecipeTest
 {
     public class RecipeTests
     {
+        string connstring = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
+        string testconnstring = ConfigurationManager.ConnectionStrings["unittestconn"].ConnectionString;
+
         [SetUp]
         public void Setup()
         {
-            dbManager.SetConnectionString("Server = tcp:esty.database.windows.net,1433; Initial Catalog = HeartyHearthDB; Persist Security Info = False; User ID = Estyadmin; Password =Hiitsme!" +
-            "; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
+            dbManager.SetConnectionString(connstring, true);
         }
 
-        private int Recipeid()
+        private DataTable GetDataTable(string sql)
         {
-            return SQLUtility.GetFirstColumnsFirstRowValueInt("SELECT TOP 1 RecipeID FROM Recipe");
+            DataTable dt = new();
+            dbManager.SetConnectionString(testconnstring, false);
+            dt = SQLUtility.GetDataTable(sql);
+            dbManager.SetConnectionString(connstring, false);
+            return dt;
+        }
+
+        private int GetFirstColumnFirstRowValue(string sql)
+        {
+            int n = 0;
+            dbManager.SetConnectionString(testconnstring, false);
+            n = SQLUtility.GetFirstColumnsFirstRowValueInt(sql);
+            dbManager.SetConnectionString(connstring, false);
+            return n;
+        }
+
+        private void ExecuteSQL(string sql)
+        {
+            dbManager.SetConnectionString(testconnstring, false);
+            SQLUtility.ExecuteSQL(sql);
+            dbManager.SetConnectionString(connstring, false);
         }
 
         [Test]
