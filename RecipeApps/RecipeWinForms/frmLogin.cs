@@ -39,9 +39,9 @@ namespace RecipeWinForms
                 currentstatus = true;
                 this.Close();
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Invalid login. Try again.", Application.ProductName);
+                MessageBox.Show(ex.Message, Application.ProductName);
             }
            
         }

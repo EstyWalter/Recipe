@@ -34,8 +34,11 @@ namespace RecipeAppsMAUI
 
             IConfiguration configval = app.Services.GetService<IConfiguration>();
             var settingsval = configval.GetRequiredSection("Settings").Get<Settings>();
-
-            App.ConnStringSetting = settingsval.devconn.ToString();
+#if DEBUG
+            App.ConnStringSetting = settingsval.devconn;
+#else
+            App.ConnStringSetting = settingsval.liveconn;
+#endif
             return app;
         }
     }
