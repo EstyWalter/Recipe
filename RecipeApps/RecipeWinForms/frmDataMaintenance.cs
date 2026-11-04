@@ -24,8 +24,6 @@ namespace RecipeWinForms
             BindData(currenttable);
         }
 
-
-
         private void BindData(TableTypeEnum tableType)
         {
             currenttable = tableType;
@@ -52,46 +50,37 @@ namespace RecipeWinForms
             }
         }
 
-        private string GetCellValue(int row, int coloumn)
-        {
-            return gData.Rows[row].Cells[coloumn].Value.ToString();
-        }
-
         private void DeleteData(int row)
         {
-            string value = GetCellValue(row, 1);
-            if (value != "")
+            int id = WindowsFormsUtility.GetIdFromGrid(gData, row, currenttable.ToString() + "id");
+            if (id > 0)
             {
-                int id = WindowsFormsUtility.GetIdFromGrid(gData, row, currenttable.ToString() + "id");
-                if (id > 0)
+                try
                 {
-                    try
+                    String message = "Are you sure you want to delete this " + currenttable.ToString();
+                    if (currenttable == TableTypeEnum.Users)
                     {
-                        String message = "Are you sure you want to delete this " + currenttable.ToString();
-                        if (currenttable == TableTypeEnum.Users)
-                        {
-                            message = "Are you sure you want to delete this user and all related recipes, meals and cookbooks?";
-                        }
-                            var response = MessageBox.Show(message, Application.ProductName, MessageBoxButtons.YesNo);
-                            if (response == DialogResult.No)
-                            {
-                                return;
-                            }
-                        
-                        DataMaintenance.DeleteRow(id, currenttable.ToString());
-                        gData.Rows.RemoveAt(row);
+                        message = "Are you sure you want to delete this user and all related recipes, meals and cookbooks?";
                     }
-                    catch (Exception ex)
+                    var response = MessageBox.Show(message, Application.ProductName, MessageBoxButtons.YesNo);
+                    if (response == DialogResult.No)
                     {
-                        MessageBox.Show(ex.Message, Application.ProductName);
+                        return;
                     }
-                }
-                else if (id < gData.Rows.Count)
-                {
+
+                    DataMaintenance.DeleteRow(id, currenttable.ToString());
                     gData.Rows.RemoveAt(row);
                 }
-
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, Application.ProductName);
+                }
             }
+            else if (id < gData.Rows.Count)
+            {
+                gData.Rows.RemoveAt(row);
+            }
+
         }
 
         private bool SaveData(TableTypeEnum tableType)
@@ -130,8 +119,18 @@ namespace RecipeWinForms
 
         private void GData_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
-            DeleteData(e.RowIndex);
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                return;
+
+            if (gData.Rows[e.RowIndex].IsNewRow)
+                return;
+
+            if (gData.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
+            {
+                DeleteData(e.RowIndex);
+            }
         }
+
 
         private void BtnSave_Click(object? sender, EventArgs e)
         {
