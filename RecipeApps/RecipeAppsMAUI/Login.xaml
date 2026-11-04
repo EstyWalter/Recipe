@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecipeAppsMAUI.Login"
+             Title="Login">
+    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+        <Label  Text="Login" FontSize="Header" VerticalOptions="Center" HorizontalOptions="Center" />
+        <Label x:Name="Messagelbl" TextColor="{StaticResource Danger}" FontSize="Medium" HorizontalOptions="Center" />
+        <Border Stroke="Black" StrokeThickness="7" Padding="15" MaximumWidthRequest="250">
+            <Grid RowDefinitions="*,*,*" ColumnDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="6" MaximumWidthRequest="250">
+                <Label x:Name="UserNamelbl" Text="User Name" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry x:Name="UserNametxt" Grid.Row="0" Grid.Column="1" />
+                <Label x:Name="Passwordlbl" Text="Password" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                <Entry x:Name="Passwordtxt" Grid.Row="1" Grid.Column="1" IsPassword="True"/>
+                <Button x:Name="Loginbtn" Text="Login" Grid.Row="2" Grid.Column="0" MaximumWidthRequest="90" Background="Black"/>
+                <Button x:Name="Cancelbtn" Text="Cancel" Grid.Row="2" Grid.Column="1" HorizontalOptions="Start" MinimumWidthRequest="90"  MaximumWidthRequest="90" BackgroundColor="{StaticResource Warning}" Clicked="Cancelbtn_Clicked"/>
+            </Grid>
+        </Border>
+    </VerticalStackLayout>
+</ContentPage>
