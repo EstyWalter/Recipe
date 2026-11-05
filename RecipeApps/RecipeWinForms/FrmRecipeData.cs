@@ -14,6 +14,8 @@ namespace RecipeWinForms
         BindingSource bindsource = new BindingSource();
         int recipeid = 0;
 
+        bool reloadafterchanges = false;
+
         public frmRecipeData()
         {
             InitializeComponent();
@@ -27,15 +29,20 @@ namespace RecipeWinForms
             btnChangeStatus.Click += BtnChangeStatus_Click;
             gSteps.DataError += DataError;
             gIngredients.DataError += DataError;
+            this.Activated += FrmRecipeData_Activated;
             this.FormClosing += FrmRecipeData_FormClosing;
+        }
+        private void GetRecipeData(int recipeid)
+        {
+            dtRecipe = Recipe.GetRecipe("@RecipeId", recipeid);
+            bindsource.DataSource = dtRecipe;
         }
 
         public void ShowForm(int recipeidval)
         {
             recipeid = recipeidval;
             this.Tag = recipeidval;
-            dtRecipe = Recipe.GetRecipe("@RecipeId", recipeidval);
-            bindsource.DataSource = dtRecipe;
+            GetRecipeData(recipeidval);
             WindowsFormsUtility.SetControlBinding(txtRecipeName, bindsource);
             WindowsFormsUtility.SetControlBinding(txtDateDrafted, bindsource);
             WindowsFormsUtility.SetControlBinding(txtDatePublished, bindsource);
@@ -248,8 +255,11 @@ namespace RecipeWinForms
         {
             if (this.MdiParent != null && this.MdiParent is frmMain)
             {
+                recipeid = SQLUtility.GetValueFromFirstRowAsInt(dtRecipe, "RecipeId"); 
                 ((frmMain)this.MdiParent).OpenForm(typeof(frmStatus), recipeid);
+                reloadafterchanges = true;
             }
+
         }
 
         private string GetRecipeDesc()
@@ -261,6 +271,14 @@ namespace RecipeWinForms
                 value = SQLUtility.GetValueFromFirstRowAsString(dtRecipe, "RecipeName");
             }
             return value;
+        }
+
+        private void FrmRecipeData_Activated(object? sender, EventArgs e)
+        {
+            if (reloadafterchanges == true)
+            {
+                GetRecipeData(recipeid);
+            }
         }
 
         private void BtnIngredientsSave_Click(object? sender, EventArgs e)

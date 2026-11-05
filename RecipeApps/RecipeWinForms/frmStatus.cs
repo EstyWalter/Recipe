@@ -81,7 +81,11 @@ namespace RecipeWinForms
 
         private void ClearOldStatus(string columnname)
         {
-            dt.Rows[0][columnname] = DBNull.Value;
+            if(dt.Rows.Count > 0)
+            {
+                dt.Rows[0][columnname] = DBNull.Value;
+            }
+            
         }
 
         private void SaveNewStatus(TextBox txt)

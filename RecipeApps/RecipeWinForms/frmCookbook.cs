@@ -7,7 +7,7 @@ namespace RecipeWinForms
         public frmCookbook()
         {
             InitializeComponent();
-            GetCookbookList();
+            this.Activated += FrmCookbook_Activated;
             gCookbook.CellDoubleClick += GCookBook_CellDoubleClick;
             btnNewCookbook.Click += BtnNewCookbook_Click;
             gCookbook.KeyDown += GCookbook_KeyDown;
@@ -35,6 +35,11 @@ namespace RecipeWinForms
                 }
             }
 
+        }
+
+        private void FrmCookbook_Activated(object? sender, EventArgs e)
+        {
+            GetCookbookList();
         }
 
         private void GCookBook_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)

@@ -7,10 +7,10 @@ namespace RecipeWinForms
         public frmRecipe()
         {
             InitializeComponent();
-            ListRecipes();
             WindowsFormsUtility.FormatGridSearchResults(gRecipe, "Recipe");
             gRecipe.CellDoubleClick += GRecipe_CellDoubleClick;
             btnNew.Click += BtnNew_Click;
+            this.Activated += FrmRecipe_Activated;
             gRecipe.KeyDown += GRecipe_KeyDown;
         }
 
@@ -32,6 +32,10 @@ namespace RecipeWinForms
             {
               ((frmMain)this.MdiParent).OpenForm(typeof(frmRecipeData), id);
             }
+        }
+        private void FrmRecipe_Activated(object? sender, EventArgs e)
+        {
+            ListRecipes();
         }
 
         private void GRecipe_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
