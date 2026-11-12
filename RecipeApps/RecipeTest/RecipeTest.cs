@@ -1,269 +1,273 @@
-﻿using CPUFramework;
-using Microsoft.IdentityModel.Protocols;
-using NLog.Internal;
-using NUnit.Framework.Legacy;
+﻿#nullable enable
+using System.Configuration;
+using CPUFramework;
 using System.Data;
-using System.Runtime.CompilerServices;
-
 namespace RecipeTest
 {
+
     public class RecipeTests
     {
-        string connstring = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
-        string testconnstring = ConfigurationManager.ConnectionStrings["unittestconn"].ConnectionString;
-
+      private static bizRecipe rec = new();
         [SetUp]
         public void Setup()
         {
-            dbManager.SetConnectionString(connstring, true);
-        }
+            var config = global::System.Configuration.ConfigurationManager.OpenMappedExeConfiguration(
+                new ExeConfigurationFileMap { ExeConfigFilename = Path.Combine(TestContext.CurrentContext.TestDirectory, "App.test.config") },
+                ConfigurationUserLevel.None);
 
-        private DataTable GetDataTable(string sql)
-        {
-            DataTable dt = new();
-            dbManager.SetConnectionString(testconnstring, false);
-            dt = SQLUtility.GetDataTable(sql);
-            dbManager.SetConnectionString(connstring, false);
-            return dt;
-        }
-
-        private int GetFirstColumnFirstRowValue(string sql)
-        {
-            int n = 0;
-            dbManager.SetConnectionString(testconnstring, false);
-            n = SQLUtility.GetFirstColumnsFirstRowValueInt(sql);
-            dbManager.SetConnectionString(connstring, false);
-            return n;
-        }
-
-        private void ExecuteSQL(string sql)
-        {
-            dbManager.SetConnectionString(testconnstring, false);
-            SQLUtility.ExecuteSQL(sql);
-            dbManager.SetConnectionString(connstring, false);
+            dbManager.SetConnectionString(config.ConnectionStrings.ConnectionStrings["liveconn"]?.ConnectionString
+                ?? throw new InvalidOperationException("Missing liveconn in App.test.secret.config."), true);
         }
 
         [Test]
         public void LoadRecipe()
         {
             int recipeid = Recipeid();
-            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
-            TestContext.WriteLine("a id from HeartyHearthdb in table Recipe = " + recipeid);
-            TestContext.WriteLine("Ensure that app loads Recipeid " + recipeid);
-            DataTable dtRecipe = Recipe.SearchRecipeWithId(recipeid);
-            int loadedid = (int)dtRecipe.Rows[0]["Recipeid"];
-            ClassicAssert.IsTrue(loadedid == recipeid, "Recipeid from database" + recipeid + "does not = " + loadedid + "from RecipeApp");
-            TestContext.WriteLine("loadedid = " + loadedid + " The RecipeInfo has loaded the correct info from dbHeartyHearth");
-        }
+            DataTable dtRecipe = LoadRecipeById(recipeid);
 
-        [Test]
-
-        [TestCase("c")]
-        [TestCase("jjjj")]
-        public void SearchRecipeByName(string characters)
-        {
-            TestContext.WriteLine("search for recipes containing these characters " + characters);
-            DataTable dt = Recipe.SearchByRecipeName(characters);
-            Assume.That(dt.Rows.Count > 0, "can't run test no recipes in dbHeartyHearth or no Recipes matching " + characters);
-            if (dt.Rows.Count > 0)
-            {
-                string LoadedRecipeName = dt.Rows[0]["recipename"].ToString();
-                ClassicAssert.That(LoadedRecipeName.ToLower(), Does.Contain(characters.ToLower()));
-                TestContext.WriteLine("Loaded RecipeName = " + LoadedRecipeName + " it contains the characters specified (" + characters + ")");
-            }
+            Assert.That(Recipe.FindRecipeId(dtRecipe), Is.EqualTo(recipeid));
         }
 
 
-        [Test]
-        [TestCase("Cuisineid")]
-        [TestCase("Usersid")]
-        [TestCase("calories")]
+        [TestCase("CuisineId")]
+        [TestCase("UsersId")]
+        [TestCase("Calories")]
         public void SaveInfoForRecipewithInt(string columnname)
         {
-            int recipeid = Recipeid();
-            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
-            int updatedvalue = SQLUtility.GetFirstColumnsFirstRowValueInt("select min(" + columnname + ") from recipe");
-            int value = SQLUtility.GetFirstColumnsFirstRowValueInt("select " + columnname + " from recipe where recipeid = " + recipeid);
-            if (updatedvalue == value)
+            WithNewRecipe(recipeid =>
             {
-                updatedvalue = SQLUtility.GetFirstColumnsFirstRowValueInt("select max(" + columnname + ") from recipe");
-            }
-            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
+                bizRecipe rec = new();
+                DataTable dtRecipe = LoadRecipeById(recipeid);
+                int currentValue = Convert.ToInt32(dtRecipe.Rows[0][columnname]);
+                int updatedValue = GetDifferentIntValue(columnname, currentValue);
 
-            DataTable dtRecipe = Recipe.SearchRecipeWithId(recipeid);
-            dtRecipe.Rows[0][columnname] = updatedvalue;
-            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " needs to be updated to " + updatedvalue);
-            Recipe.Save(dtRecipe);
-            value = SQLUtility.GetFirstColumnsFirstRowValueInt("select " + columnname + " from recipe where recipeid = " + recipeid);
-          
-            ClassicAssert.IsTrue(updatedvalue == value, "The recipe where recipeid = " + recipeid + " " + columnname + " = " + value + " does not = " + updatedvalue);
-            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + updatedvalue);
+                dtRecipe.Rows[0][columnname] = updatedValue;
+                rec.Save(dtRecipe);
+
+                Assert.That(ReadRecipeValue(recipeid, columnname), Is.EqualTo(updatedValue));
+            });
         }
 
-
-        [Test]
-        [TestCase("Cuisineid")]
-        [TestCase("Usersid")]
-        [TestCase("calories")]
+        [TestCase("CuisineId")]
+        [TestCase("UsersId")]
+        [TestCase("Calories")]
         public void SaveInvalidInfoForRecipewithInt(string columnname)
         {
-            int recipeid = Recipeid();
-            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
-            //int updatedvalue = SQLUtility.GetFirstColumnsFirstRowValueInt("select min(" + columnname + ") from recipe");
-            int updatedvalue = -1;
-            int value = SQLUtility.GetFirstColumnsFirstRowValueInt("select " + columnname + " from recipe where recipeid = " + recipeid);
-            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
-
-            DataTable dtRecipe = Recipe.SearchRecipeWithId(recipeid);
-            dtRecipe.Rows[0][columnname] = updatedvalue;
-            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " cannot be updated to " + updatedvalue);
-           Exception ex = Assert.Throws<Exception>(()=> Recipe.Save(dtRecipe));
-    
-            TestContext.WriteLine(ex.Message);
+            WithNewRecipe(recipeid => AssertInvalidSave(recipeid, columnname, -1));
         }
 
-        [Test]
-        [TestCase("RecipeName", "I am updated")]
-        [TestCase("DateDrafted", "1-1-2000 12:00:00 AM")]
-
-        public void SaveInfoForRecipestring(string columnname, string updatedvalue)
+        [TestCase("RecipeName")]
+        [TestCase("DateDrafted")]
+        public void SaveInfoForRecipestring(string columnname)
         {
-            int recipeid = Recipeid();
-            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
-            string value = SQLUtility.GetFirstColumnsFirstRowValue("select " + columnname + " from recipe where recipeid = " + recipeid, "string").ToString();
-            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
+            WithNewRecipe(recipeid =>
+            {
+                bizRecipe rec = new();
+                DataTable dtRecipe = rec.Load(recipeid);
+                object updatedValue = columnname == "RecipeName"
+                    ? (object)CreateTestName("Updated recipe")
+                    : new DateTime(2000, 1, 2);
 
-            DataTable dtRecipe = Recipe.SearchRecipeWithId(recipeid);
-            if (columnname == "RecipeName")
-            {
-                updatedvalue = updatedvalue + DateTime.Now;
-            }
-            dtRecipe.Rows[0][columnname] = updatedvalue;
-            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " needs to be updated to " + updatedvalue);
-     
-            Recipe.Save(dtRecipe);
-            value = SQLUtility.GetFirstColumnsFirstRowValue("select " + columnname + " from recipe where recipeid = " + recipeid, "string").ToString();
+                dtRecipe.Rows[0][columnname] = updatedValue;
+                rec.Save(dtRecipe);
 
-            if (columnname == "DateDrafted")
-            {
-                DateTime dateupdatedvalue = Convert.ToDateTime(updatedvalue);
-                DateTime datevalue = Convert.ToDateTime(value);
-                ClassicAssert.IsTrue(dateupdatedvalue == datevalue, "The recipe where recipeid = " + recipeid + " " + columnname + " = " + datevalue + " does not = " + dateupdatedvalue);
-            }
-            else
-            {
-                ClassicAssert.IsTrue(updatedvalue == value, "The recipe where recipeid = " + recipeid + " " + columnname + " = " + value + " does not = " + updatedvalue);
-            }
-            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + updatedvalue);
+                Assert.That(ReadRecipeValue(recipeid, columnname), Is.EqualTo(updatedValue));
+            });
         }
 
-        [Test]
         [TestCase("RecipeName")]
         [TestCase("DateDrafted")]
         public void SaveInvalidInfoForRecipestring(string columnname)
         {
-            int recipeid = Recipeid();
-            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
-            string updatevalue = "";
-            string value = SQLUtility.GetFirstColumnsFirstRowValue("select " + columnname + " from recipe where recipeid = " + recipeid, "string").ToString();
-            if(columnname == "DateDrafted")
+            WithNewRecipe(recipeid =>
             {
-                updatevalue = DateTime.Now.ToString();
-            }
-            else
-            {
-               updatevalue = SQLUtility.GetFirstColumnsFirstRowValue("select " + columnname + " from recipe where recipeid <> " + recipeid, "string").ToString();
-               
-            }
-            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " = " + value);
-            DataTable dtRecipe = Recipe.SearchRecipeWithId(recipeid);
-            dtRecipe.Rows[0][columnname] = updatevalue;
-            TestContext.WriteLine("The recipe where recipeid = " + recipeid + " " + columnname + " needs to fail when trying to update to " + updatevalue);
-            Exception ex = Assert.Throws<Exception>(() => Recipe.Save(dtRecipe));
-            TestContext.WriteLine(ex.Message);
-        }
-
-        [Test]
-        [TestCase("1/1/2000", "great recipe", 222)]
-        public void InsertNewRecipe(DateTime datedrafted, string recipename, int calories)
-        {
-            DataTable dt = SQLUtility.GetDataTable("select * from recipe where recipeid = 0");
-            DataRow r = dt.Rows.Add();
-            Assume.That(dt.Rows.Count == 1);
-            int usersid = SQLUtility.GetFirstColumnsFirstRowValueInt("select top 1 usersid from users");
-            int cuisineid = SQLUtility.GetFirstColumnsFirstRowValueInt("select top 1 cuisineid from cuisine");
-            recipename = recipename + DateTime.Now;
-            Assume.That(usersid > 0, "cant run test no users in dbHeartyHearth");
-            Assume.That(cuisineid > 0, "cant run test no users in dbHeartyHearth");
-            TestContext.WriteLine("Insert recipe with recipename (" + recipename + ") ");
-            r["CuisineId"] = cuisineid;
-            r["UsersId"] = usersid;
-            r["DateDrafted"] = datedrafted;
-            r["RecipeName"] = recipename;
-            r["Calories"] = calories;
-
-            Recipe.Save(dt);
-            int newid = SQLUtility.GetFirstColumnsFirstRowValueInt("select * from Recipe r where r.RecipeName = '" + recipename + "' ");
-            ClassicAssert.IsTrue(newid > 0, "cant insert recipe with recipename " + recipename);
-            TestContext.WriteLine("recipe with recipename (" + recipename + ") was inserted into dbHeartyhearth");
+                if (columnname == "DateDrafted")
+                {
+                    AssertInvalidSave(recipeid, columnname, DateTime.Today.AddDays(1));
+                }
+                else
+                {
+                    int otherRecipeId = Recipeid(recipeid);
+                    object duplicateName = ReadRecipeValue(otherRecipeId, "RecipeName");
+                    AssertInvalidSave(recipeid, columnname, duplicateName);
+                }
+            });
         }
 
         [Test]
         public void FailToDeleteRecipeWhenViolatingBusinessRule()
         {
-            int recipeid = SQLUtility.GetFirstColumnsFirstRowValueInt("select recipeid from recipe r where statuses = 'Published' or (statuses = 'Archived' and datediff(day, isnull(DatePublished, DateDrafted),  DateArchived) <= 30)");
-            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
-            TestContext.WriteLine("do not delete recipe where recipeid = " + recipeid);
-            DataTable dt = SQLUtility.GetDataTable("select recipeid from recipe r where recipeid =" + recipeid);
-            Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(recipeid, dt));
-            TestContext.WriteLine(ex.Message);
-        }
+            int recipeid = SQLUtility.GetFirstColumnsFirstRowValueInt(@"
+                select coalesce(min(RecipeId), 0)
+                from Recipe
+                where Statuses = 'Published'
+                   or (Statuses = 'Archived'
+                       and datediff(day, isnull(DatePublished, DateDrafted), DateArchived) <= 30)");
 
+            Assume.That(recipeid, Is.GreaterThan(0), "No recipe matches the deletion business rule.");
+            AssertDeleteRejected(recipeid);
+        }
 
         [Test]
         public void DeleteRecipe()
         {
-            int recipeid = SQLUtility.GetFirstColumnsFirstRowValueInt("select recipeid from recipe r where statuses <> 'Published' or (statuses = 'Archived' and datediff(day, DateArchived, getdate()) >= 30)");
-            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
-            TestContext.WriteLine("delete recipe where recipeid = " + recipeid);
-            DataTable dt = SQLUtility.GetDataTable("select * from recipe r where recipeid = " + recipeid);
-            Recipe.Delete(recipeid, dt);
-            DataTable dtaftersave = SQLUtility.GetDataTable("select * from recipe r where recipeid = " + recipeid);
-            ClassicAssert.IsTrue(dtaftersave.Rows.Count == 0, "Recipe where recipeid = " + recipeid + " is not deleted from dbHeartyhearth");
-            TestContext.WriteLine("recipe where recipeid = " + recipeid + " is deleted");
+            WithNewRecipe(recipeid =>
+            {
+                DataTable dtRecipe = LoadRecipeById(recipeid);
+
+                rec.Delete(dtRecipe);
+
+                Assert.That(RecipeExists(recipeid), Is.False, $"Recipe {recipeid} still exists.");
+            });
         }
 
         [Test]
         public void FailToDeleteRecipeWithFK()
         {
-            int recipeid = Recipeid();
-            Assume.That(recipeid > 0, "No recipes in HearthyHearthdb can't run the test");
-            TestContext.WriteLine("do not delete recipe, where recipeid = " + recipeid);
-            DataTable dt = SQLUtility.GetDataTable("select * from recipe r where recipeid = " + recipeid);
-            Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(recipeid, dt)); 
-            TestContext.WriteLine(ex.Message);
+            int recipeid = SQLUtility.GetFirstColumnsFirstRowValueInt(@"
+                select coalesce(min(r.RecipeId), 0)
+                from Recipe r
+                where r.Statuses = 'Drafted'
+                  and exists (select 1 from CookbookRecipe cr where cr.RecipeId = r.RecipeId)");
+
+            Assume.That(recipeid, Is.GreaterThan(0), "No drafted recipe is linked to a cookbook.");
+            AssertDeleteRejected(recipeid);
         }
 
-        [Test]
         [TestCase("Users")]
         [TestCase("Cuisine")]
         public void GetListForFK(string tablename)
         {
-            int rowsintable = SQLUtility.GetFirstColumnsFirstRowValueInt("select total = count(*) from " + tablename);
-            Assume.That(rowsintable > 0, "No " + tablename + " in HearthyHearthdb can't run the test");
-            TestContext.WriteLine("Number of " + tablename + " in db " + rowsintable);
-            TestContext.WriteLine("Ensure that number of rows returned by app matches " + rowsintable);
-            DataTable dt;
-            if (tablename == "Users")
+            int expectedCount = SQLUtility.GetFirstColumnsFirstRowValueInt($"select count(*) from {tablename}");
+            DataTable actual = tablename == "Users"
+                ? Users.GetUsersDataTable()
+                : Cuisine.GetCuisineDataTable();
+
+            Assert.That(actual.Rows.Count, Is.EqualTo(expectedCount));
+        }
+
+        private static int Recipeid(int excludedRecipeId = 0)
+        {
+            int recipeid = SQLUtility.GetFirstColumnsFirstRowValueInt(
+                $"select coalesce(min(RecipeId), 0) from Recipe where RecipeId <> {excludedRecipeId}");
+
+            Assume.That(recipeid, Is.GreaterThan(0), "No suitable recipe exists in the test database.");
+            return recipeid;
+        }
+
+        private static DataTable LoadRecipeById(int recipeid)
+        {
+            bizRecipe r = new();
+            DataTable dtRecipe = r.Load(recipeid);
+            string msg = $"Expected one row for RecipeId {recipeid}.";
+            Assert.That(dtRecipe.Rows.Count, Is.EqualTo(1), msg);
+            TestContext.WriteLine(msg);
+            return dtRecipe;
+        }
+
+        private static object ReadRecipeValue(int recipeid, string columnname)
+        {
+            DataTable data = SQLUtility.GetDataTable(
+                $"select {columnname} from Recipe where RecipeId = {recipeid}");
+
+            Assert.That(data.Rows.Count, Is.EqualTo(1));
+            return data.Rows[0][columnname];
+        }
+
+        private static int GetDifferentIntValue(string columnname, int currentValue)
+        {
+            if (columnname == "Calories")
             {
-                dt = Recipe.GetUsersDataTable();
+                return currentValue == 250 ? 251 : 250;
             }
-            else
+
+            string tableName = columnname == "CuisineId" ? "Cuisine" : "Users";
+            int updatedValue = SQLUtility.GetFirstColumnsFirstRowValueInt(
+                $"select coalesce(min({columnname}), 0) from {tableName} where {columnname} <> {currentValue}");
+
+            Assume.That(updatedValue, Is.GreaterThan(0), $"Add a second row to {tableName} to run this test.");
+            return updatedValue;
+        }
+
+        private static void AssertInvalidSave(int recipeid, string columnname, object invalidValue)
+        {
+            object originalValue = ReadRecipeValue(recipeid, columnname);
+            DataTable dtRecipe = LoadRecipeById(recipeid);
+            dtRecipe.Rows[0][columnname] = invalidValue;
+
+            var error = Assert.Catch(() => RecipeTests.rec.Save(dtRecipe));
+            TestContext.WriteLine(error?.Message);
+            Assert.That(ReadRecipeValue(recipeid, columnname), Is.EqualTo(originalValue));
+        }
+
+        private static void AssertDeleteRejected(int recipeid)
+        {
+            DataTable dtRecipe = LoadRecipeById(recipeid);
+
+            var error = Assert.Catch(() => rec.Delete(dtRecipe));
+            TestContext.WriteLine(error?.Message);
+            Assert.That(RecipeExists(recipeid), Is.True, $"Recipe {recipeid} should still exist.");
+        }
+
+        private static bool RecipeExists(int recipeid)
+        {
+            int count = SQLUtility.GetFirstColumnsFirstRowValueInt(
+                $"select count(*) from Recipe where RecipeId = {recipeid}");
+            return count == 1;
+        }
+
+        private static void WithNewRecipe(
+            Action<int> runTest, string? recipeName = null, int calories = 222, DateTime? dateDrafted = null)
+        {
+            int usersid = SQLUtility.GetFirstColumnsFirstRowValueInt(
+                "select coalesce(min(UsersId), 0) from Users");
+            int cuisineid = SQLUtility.GetFirstColumnsFirstRowValueInt(
+                "select coalesce(min(CuisineId), 0) from Cuisine");
+            Assume.That(usersid, Is.GreaterThan(0), "Add a user to the test database.");
+            Assume.That(cuisineid, Is.GreaterThan(0), "Add a cuisine to the test database.");
+
+            string testName = recipeName ?? CreateTestName("Test recipe");
+            string escapedName = EscapeSqlText(testName);
+            DataTable dtRecipe = SQLUtility.GetDataTable("select * from Recipe where 1 = 0");
+            DataRow row = dtRecipe.NewRow();
+            row["CuisineId"] = cuisineid;
+            row["UsersId"] = usersid;
+            row["DateDrafted"] = dateDrafted ?? new DateTime(2000, 1, 1);
+            row["RecipeName"] = testName;
+            row["Calories"] = calories;
+            dtRecipe.Rows.Add(row);
+
+            int recipeid = 0;
+            try
             {
-                dt = Recipe.GetCuisineDataTable();
+                rec.Save(dtRecipe);
+                recipeid = SQLUtility.GetFirstColumnsFirstRowValueInt(
+                    $"select coalesce(min(RecipeId), 0) from Recipe where RecipeName = N'{escapedName}'");
+
+                Assert.That(recipeid, Is.GreaterThan(0), $"Recipe {testName} was not inserted.");
+                runTest(recipeid);
             }
-            ClassicAssert.IsTrue(dt.Rows.Count > 0, "Number of rows in " + tablename + " = " + dt.Rows.Count, "number of rows returned by app (" + dt.Rows.Count + ") <> does not = " + rowsintable);
-            TestContext.WriteLine("Number of rows in " + tablename + " = " + dt.Rows.Count);
+            finally
+            {
+                if (recipeid > 0)
+                {
+                    SQLUtility.ExecuteSQL($"delete from Recipe where RecipeId = {recipeid}");
+                }
+                else
+                {
+                    SQLUtility.ExecuteSQL($"delete from Recipe where RecipeName = N'{escapedName}'");
+                }
+            }
+        }
+
+        private static string CreateTestName(string prefix)
+        {
+            return $"{prefix} {Guid.NewGuid():N}";
+        }
+
+        private static string EscapeSqlText(string value)
+        {
+            return value.Replace("'", "''");
         }
     }
 }

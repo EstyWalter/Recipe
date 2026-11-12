@@ -12,6 +12,7 @@ public partial class SearchRecipe : ContentPage
 
     private void SearchRecipes()
     {
+        bizRecipe rec = new();
         DataTable dtRecipe = Recipe.GetRecipe("@List", 1);
         RecipeLst.ItemsSource = dtRecipe.Rows;
     }
