@@ -13,8 +13,9 @@ public partial class SearchRecipe : ContentPage
     private void SearchRecipes()
     {
         bizRecipe rec = new();
-        DataTable dtRecipe = Recipe.GetRecipe("@List", 1);
-        RecipeLst.ItemsSource = dtRecipe.Rows;
+        var lst = rec.GetList();
+
+        RecipeLst.ItemsSource = lst;
     }
 
     private void SearchRecipebtn_Clicked(object sender, EventArgs e)

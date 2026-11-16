@@ -1,13 +1,15 @@
 ﻿#nullable enable
-using System.Configuration;
 using CPUFramework;
+using RecipeSystem;
+using System.Configuration;
 using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace RecipeTest
 {
 
     public class RecipeTests
     {
-      private static bizRecipe rec = new();
+
         [SetUp]
         public void Setup()
         {
@@ -17,6 +19,7 @@ namespace RecipeTest
 
             dbManager.SetConnectionString(config.ConnectionStrings.ConnectionStrings["liveconn"]?.ConnectionString
                 ?? throw new InvalidOperationException("Missing liveconn in App.test.secret.config."), true);
+
         }
 
         [Test]
@@ -36,6 +39,7 @@ namespace RecipeTest
         {
             WithNewRecipe(recipeid =>
             {
+
                 bizRecipe rec = new();
                 DataTable dtRecipe = LoadRecipeById(recipeid);
                 int currentValue = Convert.ToInt32(dtRecipe.Rows[0][columnname]);
@@ -113,6 +117,8 @@ namespace RecipeTest
         {
             WithNewRecipe(recipeid =>
             {
+
+                bizRecipe rec = new();
                 DataTable dtRecipe = LoadRecipeById(recipeid);
 
                 rec.Delete(dtRecipe);
@@ -145,6 +151,57 @@ namespace RecipeTest
 
             Assert.That(actual.Rows.Count, Is.EqualTo(expectedCount));
         }
+
+
+        [TestCase("Ingredient")]
+        [TestCase("Recipe")]
+        public void GetList(string tablename)
+        {
+            int expectedCount = SQLUtility.GetFirstColumnsFirstRowValueInt($"select count(*) from {tablename}");
+            int i = 0;
+            if (tablename == "Ingredient")
+            {
+                bizIngredient ing = new();
+                var lst = ing.GetList();
+                i = lst.Count();
+            }
+            else
+            {
+                bizRecipe rec = new();
+                var lst = rec.GetList();
+                i = lst.Count();
+            }
+            
+            string msg = $"The expected amount of {tablename}s is {expectedCount}. {tablename} is equal to {i}";
+            TestContext.WriteLine(msg);
+            Assert.That(i, Is.EqualTo(expectedCount), msg);
+        }
+
+        [Test]
+        public void LoadSetsRecipeName()
+        {
+            bizRecipe rec = new();
+            int recipeId = Recipeid();
+
+            DataTable dtRecipe = rec.Load(recipeId);
+
+            Assert.That(dtRecipe.Rows.Count, Is.EqualTo(1),
+                $"Expected one row for recipe {recipeId}.");
+
+            string expectedName = dtRecipe.Rows[0].Field<string>("RecipeName")!;
+
+            Assert.That(rec.RecipeName, Is.EqualTo(expectedName),
+                $"RecipeName should match the loaded row for recipe {recipeId}.");
+        }
+
+        [Test]
+        public void SearchRecipe()
+        {
+            bizRecipe rec = new();
+            string? recipename = SQLUtility.GetFirstColumnsFirstRowValue("select recipename from recipe", "string").ToString();
+            var lst = rec.Search(recipename);
+        }
+
 
         private static int Recipeid(int excludedRecipeId = 0)
         {
@@ -191,17 +248,21 @@ namespace RecipeTest
 
         private static void AssertInvalidSave(int recipeid, string columnname, object invalidValue)
         {
+
+            bizRecipe rec = new();
             object originalValue = ReadRecipeValue(recipeid, columnname);
             DataTable dtRecipe = LoadRecipeById(recipeid);
             dtRecipe.Rows[0][columnname] = invalidValue;
 
-            var error = Assert.Catch(() => RecipeTests.rec.Save(dtRecipe));
+            var error = Assert.Catch(() => rec.Save(dtRecipe));
             TestContext.WriteLine(error?.Message);
             Assert.That(ReadRecipeValue(recipeid, columnname), Is.EqualTo(originalValue));
         }
 
         private static void AssertDeleteRejected(int recipeid)
         {
+
+            bizRecipe rec = new();
             DataTable dtRecipe = LoadRecipeById(recipeid);
 
             var error = Assert.Catch(() => rec.Delete(dtRecipe));
@@ -219,6 +280,8 @@ namespace RecipeTest
         private static void WithNewRecipe(
             Action<int> runTest, string? recipeName = null, int calories = 222, DateTime? dateDrafted = null)
         {
+
+            bizRecipe rec = new();
             int usersid = SQLUtility.GetFirstColumnsFirstRowValueInt(
                 "select coalesce(min(UsersId), 0) from Users");
             int cuisineid = SQLUtility.GetFirstColumnsFirstRowValueInt(
